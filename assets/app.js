@@ -37,7 +37,7 @@ window.Omni = (function () {
   var ANALYSIS_BASE = PAGES_BASE + "/" + encPath(ANALYSIS_PATH);
   var SPEC_PATH = "專案需知";                        // 規範文件（repo 資料夾名是「需知」；2026-10-02 自 Slots/ 搬到 repo 根目錄）
   var SPEC_API = API_BASE + "/contents/" + encPath(SPEC_PATH);
-  var SPEC_URL = PAGES_BASE + "/" + encPath(SPEC_PATH) + "/igaming_specification.html";   // Slot 遊戲共用的開發規範
+  var SPEC_URL = PAGES_BASE + "/" + encPath(SPEC_PATH) + "/omniplay_specification.html";   // Slot 遊戲共用的開發規範
 
   var CAT_LABEL = { demo: "Demogame", idea: "遊戲發想", analysis: "競品分析", spec: "專案須知", numeric: "數值報告", report: "其他報告", links: "常用連結" };
 
@@ -433,8 +433,8 @@ window.Omni = (function () {
   /* ---------- 專案須知：只列 專案需知/ 裡編譯好的 *.html 完整規範
      （各 .md 是它的來源章節，由 其他/_build_html.py 合併成網頁版，不另外列） ---------- */
   // 顯示名稱；沒列到的檔案就用檔名（底線換空白）
-  var SPEC_TITLE = { igaming_specification: "Omniplay 開發規範", landbase_specification: "Landbase 開發規範", reskin_specification: "Reskin 開發規範" };
-  var SPEC_ORDER = ["igaming_specification", "landbase_specification", "reskin_specification"];
+  var SPEC_TITLE = { omniplay_specification: "Omniplay 開發規範", landbase_specification: "Landbase 開發規範", reskin_specification: "Reskin 開發規範" };
+  var SPEC_ORDER = ["omniplay_specification", "landbase_specification", "reskin_specification"];
   function specItem(f, group) {
     var base = f.name.replace(/\.html?$/i, "");
     var rel = SPEC_PATH + "/" + (group ? group + "/" : "") + f.name;
