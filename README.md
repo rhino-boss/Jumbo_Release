@@ -1,6 +1,6 @@
-# Omniplay（Jumbo_Output）
+# Omniplay（Jumbo_Release）
 
-工作成果的網頁索引站。線上位址：<https://rhino-boss.github.io/Jumbo_Output/>
+工作成果的網頁索引站。線上位址：<https://rhino-boss.github.io/Jumbo_Release/>
 
 > **來源路徑寫在 `assets/app.js` 最上面的 `SLOTS_PATH` / `ANALYSIS_PATH` / `SPEC_PATH`。**
 > 2026-10-02 專案需知自 `Slots/專案需知` 搬到 Jumbo repo 根目錄 `專案需知/`，`SPEC_PATH` 已跟著改。
