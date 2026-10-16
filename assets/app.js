@@ -280,8 +280,11 @@ window.Omni = (function () {
              遊戲發想/<遊戲名>            → 沒有 Game ID＝發想中的遊戲 */
         var CODE_RE = /^[A-Za-z0-9]+_[^/]+$/;
         var IDEA_RE = /^遊戲發想\/[^/]+$/;
+        // 不列在入口頁的遊戲資料夾（實驗分支、暫存副本等）
+        var HIDE_FOLDERS = ["H045_超級鑽石_2"];
         var folders = nodes.filter(function (n) {
-          return n.type === "tree" && (CODE_RE.test(n.path) || IDEA_RE.test(n.path));
+          return n.type === "tree" && HIDE_FOLDERS.indexOf(n.path) === -1 &&
+                 (CODE_RE.test(n.path) || IDEA_RE.test(n.path));
         }).map(function (n) { return n.path; });
 
         // 全部都是同源的 Pages 靜態檔，可以一次平行抓完，不吃 API 額度
