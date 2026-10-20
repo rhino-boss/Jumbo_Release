@@ -20,6 +20,7 @@
      date    選填  "YYYY-MM-DD"。有日期的排前面（新到舊）；
                    沒日期的維持在這個檔案裡的順序
      tags    選填  字串陣列（目前卡片上不顯示，但可被搜尋）
+     kind    選填  卡片左上角標籤文字，不填就顯示分類名（例：其他報告裡的數值報告填 "數值報告"）
 
    首頁每區只顯示前 4 筆，所以放在最前面的會是預設看到的那幾筆。
    要看全部請點該區的「完整頁 →」。
@@ -30,21 +31,21 @@
 window.CATALOG = [
   /* ---- 其他報告：數值報告（各專案 其他/數值報告_<遊戲中文名>.html；規則見 專案需知/開發流程.md §5.9）---- */
   {
-    title: "數值報告 宙斯 2500",
+    title: "宙斯 2500", kind: "數值報告",
     url: "https://rhino-boss.github.io/Jumbo/Slots/H027_宙斯%202500/其他/數值報告_宙斯%202500.html",
     cat: "report", game: "H027",
     desc: "Zeus 2500 A／B vs Gates of Olympus 1000：核心指標、倍數球、倍率線型、連消、Cluster 占比",
     date: "2026-10-07"
   },
   {
-    title: "數值報告 超級鑽石",
+    title: "超級鑽石", kind: "數值報告",
     url: "https://rhino-boss.github.io/Jumbo/Slots/H045_超級鑽石/其他/數值報告_超級鑽石.html",
     cat: "report", game: "H045",
     desc: "Super Diamond vs Super Ace vs Lucky Ace：金框、倍率線型、連消、大鬼、WILD 倍數",
     date: "2026-10-07"
   },
   {
-    title: "數值報告 錢來襲",
+    title: "錢來襲", kind: "數值報告",
     url: "https://rhino-boss.github.io/Jumbo/Slots/H014_錢來襲/其他/數值報告_錢來襲.html",
     cat: "report", game: "H014",
     desc: "錢來襲 vs JILI Money Coming：R4 特色轉輪、RESPIN、幸運轉盤、獎項結構",

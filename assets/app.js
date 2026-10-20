@@ -515,7 +515,7 @@ window.Omni = (function () {
     return '<a class="card ' + esc(it.cat) + '" href="' + esc(it.url) + '"' +
            (ext ? '' : '') + '>' +
       '<div class="card-top">' +
-        '<span class="badge ' + esc(it.cat) + '">' + esc(CAT_LABEL[it.cat] || it.cat) + '</span>' +
+        '<span class="badge ' + esc(it.cat) + '">' + esc(it.kind || CAT_LABEL[it.cat] || it.cat) + '</span>' +
         (showGid ? '<span class="gid">' + esc(it.game) + '</span>' : '') +
         (ext ? '<span class="ext">外部連結 ↗</span>' : '') +
       '</div>' +
