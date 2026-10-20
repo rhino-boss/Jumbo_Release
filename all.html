@@ -8,8 +8,8 @@
 <link rel="alternate icon" href="assets/favicon.ico" sizes="any">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <meta name="theme-color" content="#2a3d5c">
-<!-- 改到 assets/ 裡的檔案時，這個 ?v=20261020e 要一起改（見 README「改 assets 記得改版號」） -->
-<link rel="stylesheet" href="assets/style.css?v=20261020e">
+<!-- 改到 assets/ 裡的檔案時，這個 ?v=20261020f 要一起改（見 README「改 assets 記得改版號」） -->
+<link rel="stylesheet" href="assets/style.css?v=20261020f">
 <title>Omniplay</title>
 </head>
 <body>
@@ -49,8 +49,8 @@
 
 <footer>made with ☕ by c</footer>
 
-<script src="catalog.js?v=20261020e"></script>
-<script src="assets/app.js?v=20261020e"></script>
+<script src="catalog.js?v=20261020f"></script>
+<script src="assets/app.js?v=20261020f"></script>
 <script>
 (function () {
   /* 四個分類共用這一頁，用 ?cat= 決定內容。
@@ -94,7 +94,7 @@
       def: { key: "date", desc: true }
     },
     docs: {
-      label: "報告總覽", sub: "競品分析、數值報告與其他報告，用標籤篩選",
+      label: "報告總覽", sub: "競品分析、數值報告與其他，用標籤篩選",
       placeholder: "搜尋標題、說明、標籤…",
       unit: "份",
       sorts: [{ key: "date", label: "日期" }, { key: "title", label: "名稱" }],
@@ -182,7 +182,7 @@
   var kindSel = null;
   var KIND_COLOR = { "Demogame": "--cat-demo", "遊戲發想": "--cat-idea",
                      "競品分析": "--cat-analysis", "專案須知": "--cat-spec",
-                     "數值報告": "--cat-numeric", "其他報告": "--cat-report" };
+                     "數值報告": "--cat-numeric", "其他": "--cat-report" };
   function kindOf(it) { return it.kind || Omni.CAT_LABEL[it.cat] || it.cat; }
   function renderChips() {
     var box = document.getElementById("chips");

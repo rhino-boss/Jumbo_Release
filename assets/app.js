@@ -39,7 +39,7 @@ window.Omni = (function () {
   var SPEC_API = API_BASE + "/contents/" + encPath(SPEC_PATH);
   var SPEC_URL = PAGES_BASE + "/" + encPath(SPEC_PATH) + "/igaming_specification.html";   // Slot 遊戲共用的開發規範
 
-  var CAT_LABEL = { demo: "Demogame", idea: "遊戲發想", analysis: "競品分析", spec: "專案須知", report: "其他報告", links: "常用連結" };
+  var CAT_LABEL = { demo: "Demogame", idea: "遊戲發想", analysis: "競品分析", spec: "專案須知", report: "其他", links: "常用連結" };
 
   var notes = [];
 
