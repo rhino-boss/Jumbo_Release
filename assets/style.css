@@ -200,6 +200,8 @@ nav .current { color: #fff; font-weight: 600; font-size: .85rem; }
   transition: box-shadow .25s ease, transform .25s ease;
 }
 .gcard:hover { box-shadow: var(--shadow-hover); transform: translateY(-3px); }
+/* 發想中的遊戲：淡灰卡（混在 Demogame 區用底色區分） */
+.gcard.idea { background: #eef0f3; }
 
 .ribbon {
   position: absolute; top: 0; right: 0; width: 92px; height: 92px;

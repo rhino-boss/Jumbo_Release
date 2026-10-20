@@ -39,7 +39,7 @@ window.Omni = (function () {
   var SPEC_API = API_BASE + "/contents/" + encPath(SPEC_PATH);
   var SPEC_URL = PAGES_BASE + "/" + encPath(SPEC_PATH) + "/igaming_specification.html";   // Slot 遊戲共用的開發規範
 
-  var CAT_LABEL = { demo: "Demogame", idea: "遊戲發想", analysis: "競品分析", spec: "專案須知", report: "其他", links: "常用連結" };
+  var CAT_LABEL = { demo: "開發中", idea: "遊戲發想", analysis: "競品分析", spec: "專案須知", report: "其他", links: "常用連結" };
 
   var notes = [];
 
@@ -518,7 +518,8 @@ window.Omni = (function () {
   /* ---------- 卡片渲染 ---------- */
   // 圖1 的遊戲卡
   function gameCard(g, isNew) {
-    return '<div class="gcard">' +
+    // 發想中的遊戲用淡灰卡，混在 Demogame 區裡一眼分得出來
+    return '<div class="gcard' + (g.idea ? ' idea' : '') + '">' +
       (isNew ? '<div class="ribbon"><span>NEW</span></div>' : '') +
       '<div class="gcover">' +
         // 沒有封面圖的遊戲放佔位符號：優先用該遊戲網頁的 favicon emoji，抓不到才用 🎰
