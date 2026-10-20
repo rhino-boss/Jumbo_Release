@@ -518,8 +518,7 @@ window.Omni = (function () {
   /* ---------- 卡片渲染 ---------- */
   // 圖1 的遊戲卡
   function gameCard(g, isNew) {
-    // 發想中的遊戲用淡灰卡，混在 Demogame 區裡一眼分得出來
-    return '<div class="gcard' + (g.idea ? ' idea' : '') + '">' +
+    return '<div class="gcard">' +
       (isNew ? '<div class="ribbon"><span>NEW</span></div>' : '') +
       '<div class="gcover">' +
         // 沒有封面圖的遊戲放佔位符號：優先用該遊戲網頁的 favicon emoji，抓不到才用 🎰
