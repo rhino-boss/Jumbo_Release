@@ -422,6 +422,20 @@ window.Omni = (function () {
     return p.join("，");
   }
 
+  /* analysis／specs 也留一份上次成功的清單（24h），API 額度用完時頂著，
+     不然整區會憑空消失（遊戲清單的 cachedGameList 同一招）。 */
+  function saveList(key, list) {
+    try { localStorage.setItem(key, JSON.stringify({ at: Date.now(), list: list })); } catch (e) {}
+  }
+  function cachedList(key) {
+    try {
+      var c = JSON.parse(localStorage.getItem(key) || "{}");
+      if (!c.list || !c.list.length) return null;
+      if (Date.now() - (c.at || 0) > LIST_TTL) return null;
+      return c.list;
+    } catch (e) { return null; }
+  }
+
   function loadAnalysis() {
     return Promise.all([fetchJson(ANALYSIS_API), fetchText(ANALYSIS_BASE + "/README.md")])
       .then(function (res) {
@@ -443,11 +457,14 @@ window.Omni = (function () {
           };
         });
       })
+      .then(function (list) { saveList("omniplay-analysis", list); return list; })
       .catch(function (err) {
-        notes.push(err.rateLimited
-          ? "GitHub API 額度用完（每小時 60 次、同一 IP 共用），競品分析稍後重新整理即可"
-          : "競品分析掃描失敗（" + err.message + "）");
-        return [];
+        var stale = cachedList("omniplay-analysis");
+        notes.push((err.rateLimited
+          ? "GitHub API 額度用完（每小時 60 次、同一 IP 共用）"
+          : "競品分析掃描失敗（" + err.message + "）") +
+          (stale ? "，競品分析顯示的是上次的清單" : "，競品分析稍後重新整理即可"));
+        return stale || [];
       });
   }
 
@@ -485,20 +502,23 @@ window.Omni = (function () {
       })).then(function (groups) {
         var out = files.concat.apply(files, groups);
         out.sort(function (a, b) { return a._order - b._order || a.title.localeCompare(b.title); });
+        saveList("omniplay-specs", out);
         return out;
       });
     }).catch(function (err) {
-      notes.push(err.rateLimited
-        ? "GitHub API 額度用完（每小時 60 次、同一 IP 共用），專案須知稍後重新整理即可"
-        : "專案須知掃描失敗（" + err.message + "）");
-      return [];
+      var stale = cachedList("omniplay-specs");
+      notes.push((err.rateLimited
+        ? "GitHub API 額度用完（每小時 60 次、同一 IP 共用）"
+        : "專案須知掃描失敗（" + err.message + "）") +
+        (stale ? "，專案須知顯示的是上次的清單" : "，專案須知稍後重新整理即可"));
+      return stale || [];
     });
   }
 
   /* ---------- 卡片渲染 ---------- */
   // 圖1 的遊戲卡
   function gameCard(g, isNew) {
-    return '<div class="gcard' + (g.idea ? ' idea' : '') + '">' +
+    return '<div class="gcard">' +
       (isNew ? '<div class="ribbon"><span>NEW</span></div>' : '') +
       '<div class="gcover">' +
         // 沒有封面圖的遊戲放佔位符號：優先用該遊戲網頁的 favicon emoji，抓不到才用 🎰

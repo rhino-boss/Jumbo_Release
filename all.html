@@ -8,8 +8,8 @@
 <link rel="alternate icon" href="assets/favicon.ico" sizes="any">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <meta name="theme-color" content="#2a3d5c">
-<!-- 改到 assets/ 裡的檔案時，這個 ?v=20261020d 要一起改（見 README「改 assets 記得改版號」） -->
-<link rel="stylesheet" href="assets/style.css?v=20261020d">
+<!-- 改到 assets/ 裡的檔案時，這個 ?v=20261020e 要一起改（見 README「改 assets 記得改版號」） -->
+<link rel="stylesheet" href="assets/style.css?v=20261020e">
 <title>Omniplay</title>
 </head>
 <body>
@@ -49,8 +49,8 @@
 
 <footer>made with ☕ by c</footer>
 
-<script src="catalog.js?v=20261020d"></script>
-<script src="assets/app.js?v=20261020d"></script>
+<script src="catalog.js?v=20261020e"></script>
+<script src="assets/app.js?v=20261020e"></script>
 <script>
 (function () {
   /* 四個分類共用這一頁，用 ?cat= 決定內容。
@@ -94,10 +94,17 @@
       def: { key: "date", desc: true }
     },
     docs: {
-      label: "報告總覽", sub: "競品分析、專案須知、數值報告與其他報告，用標籤篩選",
+      label: "報告總覽", sub: "競品分析、數值報告與其他報告，用標籤篩選",
       placeholder: "搜尋標題、說明、標籤…",
       unit: "份",
       sorts: [{ key: "date", label: "日期" }, { key: "title", label: "名稱" }],
+      def: { key: "date", desc: true }
+    },
+    games: {
+      label: "遊戲總覽", sub: "Demogame 與發想中的遊戲，用標籤篩選",
+      placeholder: "搜尋遊戲名稱、代號、玩法、版本…",
+      unit: "款",
+      sorts: [{ key: "date", label: "文件日期" }, { key: "id", label: "代號" }],
       def: { key: "date", desc: true }
     },
     links: {
@@ -170,14 +177,16 @@
     return out;
   }
 
-  /* 合併頁（cat=docs）的標籤篩選：null＝全部 */
+  /* 合併頁（cat=docs／cat=games）的標籤篩選：null＝全部 */
+  var MERGED = { docs: true, games: true };
   var kindSel = null;
-  var KIND_COLOR = { "競品分析": "--cat-analysis", "專案須知": "--cat-spec",
+  var KIND_COLOR = { "Demogame": "--cat-demo", "遊戲發想": "--cat-idea",
+                     "競品分析": "--cat-analysis", "專案須知": "--cat-spec",
                      "數值報告": "--cat-numeric", "其他報告": "--cat-report" };
   function kindOf(it) { return it.kind || Omni.CAT_LABEL[it.cat] || it.cat; }
   function renderChips() {
     var box = document.getElementById("chips");
-    if (cat !== "docs" || (loading && !items.length)) { box.hidden = true; return; }
+    if (!MERGED[cat] || (loading && !items.length)) { box.hidden = true; return; }
     var counts = {};
     items.forEach(function (it) { var k = kindOf(it); counts[k] = (counts[k] || 0) + 1; });
     var order = Object.keys(KIND_COLOR).filter(function (k) { return counts[k]; })
@@ -201,7 +210,7 @@
     var q = qEl.value.trim().toLowerCase();
     renderChips();
     var list = sorted(items.filter(function (it) {
-      if (cat === "docs" && kindSel && kindOf(it) !== kindSel) return false;
+      if (MERGED[cat] && kindSel && kindOf(it) !== kindSel) return false;
       return !q || Omni.haystackOf(it).indexOf(q) !== -1;
     }));
 
@@ -237,7 +246,7 @@
     }
 
     // 卡片模式：Demogame／遊戲發想用遊戲卡、常用連結用連結列、其餘用一般卡
-    if (cat === "demo" || cat === "idea") {
+    if (cat === "demo" || cat === "idea" || cat === "games") {
       var byUrl = {};
       games.forEach(function (g) { byUrl[g.playUrl] = g; });
       var newest = {};
@@ -277,10 +286,12 @@
       .map(function (i, n) { i._i = n; return i; });
   }
 
-  if (cat === "demo" || cat === "idea") {
+  if (cat === "demo" || cat === "idea" || cat === "games") {
     Omni.loadGames().then(function (g) {
-      games = g.filter(function (x) { return cat === "idea" ? x.idea : !x.idea; });
+      games = cat === "games" ? g
+        : g.filter(function (x) { return cat === "idea" ? x.idea : !x.idea; });
       items = games.map(Omni.gameAsItem);
+      if (cat === "games") items.forEach(function (it) { it._showKind = true; });
       loading = false; render();
     });
   } else if (cat === "analysis") {
@@ -292,9 +303,9 @@
       items = s.map(function (i, n) { i._i = n; return i; }); loading = false; render();
     });
   } else if (cat === "docs") {
-    // 合併頁：競品分析＋專案須知＋其他報告（含數值報告）一次載入，清單列帶分類 badge
-    Promise.all([Omni.loadAnalysis(), Omni.loadSpecs()]).then(function (res) {
-      items = res[0].concat(res[1], manualOf("report"));
+    // 合併頁：競品分析＋其他報告（含數值報告）一次載入，清單列帶分類 badge（專案須知獨立一頁）
+    Omni.loadAnalysis().then(function (a) {
+      items = a.concat(manualOf("report"));
       items.forEach(function (it, n) { it._i = n; it._showKind = true; });
       loading = false; render();
     });
