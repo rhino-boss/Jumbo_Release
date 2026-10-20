@@ -8,14 +8,13 @@
 
    另兩區沒有自動掃描，項目全部寫在下面：
 
-     數值報告   cat: "numeric"   各專案 其他/數值報告_<遊戲中文名>.html（與競品／前作的差異分析）
-     其他報告   cat: "report"    機制說明、專題報告之類
+     其他報告   cat: "report"    機制說明、專題報告、各專案數值報告（其他/數值報告_<遊戲中文名>.html）
      常用連結   cat: "links"     常用的內外部網頁
 
    欄位：
      title   必填  卡片標題
      url     必填  站內相對路徑或完整外部網址（https://...）
-     cat     必填  "demo" | "analysis" | "numeric" | "report" | "links"
+     cat     必填  "demo" | "analysis" | "report" | "links"
      game    選填  小標籤，用來分群，例 "Drive"、"Sheets"、"H016"、"PG"
      desc    選填  一行說明
      date    選填  "YYYY-MM-DD"。有日期的排前面（新到舊）；
@@ -29,30 +28,30 @@
    網址若與自動掃描到的相同會自動去重（以手動的為準）。
    ============================================================ */
 window.CATALOG = [
-  /* ---- 數值報告（各專案 其他/數值報告_<遊戲中文名>.html；規則見 專案需知/開發流程.md §5.9）---- */
+  /* ---- 其他報告：數值報告（各專案 其他/數值報告_<遊戲中文名>.html；規則見 專案需知/開發流程.md §5.9）---- */
   {
-    title: "宙斯 2500",
+    title: "數值報告 宙斯 2500",
     url: "https://rhino-boss.github.io/Jumbo/Slots/H027_宙斯%202500/其他/數值報告_宙斯%202500.html",
-    cat: "numeric", game: "H027",
+    cat: "report", game: "H027",
     desc: "Zeus 2500 A／B vs Gates of Olympus 1000：核心指標、倍數球、倍率線型、連消、Cluster 占比",
     date: "2026-10-07"
   },
   {
-    title: "超級鑽石",
+    title: "數值報告 超級鑽石",
     url: "https://rhino-boss.github.io/Jumbo/Slots/H045_超級鑽石/其他/數值報告_超級鑽石.html",
-    cat: "numeric", game: "H045",
+    cat: "report", game: "H045",
     desc: "Super Diamond vs Super Ace vs Lucky Ace：金框、倍率線型、連消、大鬼、WILD 倍數",
     date: "2026-10-07"
   },
   {
-    title: "錢來襲",
+    title: "數值報告 錢來襲",
     url: "https://rhino-boss.github.io/Jumbo/Slots/H014_錢來襲/其他/數值報告_錢來襲.html",
-    cat: "numeric", game: "H014",
+    cat: "report", game: "H014",
     desc: "錢來襲 vs JILI Money Coming：R4 特色轉輪、RESPIN、幸運轉盤、獎項結構",
     date: "2026-10-06"
   },
 
-  /* ---- 其他報告 ---- */
+  /* ---- 其他報告：機制說明／專題 ---- */
   {
     title: "老手救援 C3 (正式報告)",
     url: "https://rhino-boss.github.io/Jumbo/System/報告/機制報告_老手救援.html",
