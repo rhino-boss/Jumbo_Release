@@ -327,6 +327,24 @@ window.Omni = (function () {
         });
       })
       .then(function (games) {
+        /* 沒有封面圖的遊戲：抓該遊戲網頁 index.html 的 favicon（SVG data URI 裡的 emoji）
+           當佔位符號。只抓開頭 2KB（<link rel="icon"> 在 head 最前面），同源 Pages 靜態檔不吃 API 額度。 */
+        var needIcon = games.filter(function (g) { return !g.coverUrl && g.hasDemo; });
+        return Promise.all(needIcon.map(function (g) {
+          return fetch(g.playUrl + "index.html", { headers: { Range: "bytes=0-2047" } })
+            .then(function (r) { return r.ok ? r.text() : ""; })
+            .then(function (head) {
+              var href = head.match(/rel=["']icon["'][^>]*href=["']([^"']*)["']/i);
+              if (!href) return;
+              var svg = "";
+              try { svg = decodeURIComponent(href[1]); } catch (e) { return; }
+              var t = svg.match(/<text[^>]*>\s*([^<]+?)\s*<\/text>/);
+              if (t) g.icon = t[1];
+            })
+            .catch(function () {});
+        })).then(function () { return games; });
+      })
+      .then(function (games) {
         // 文件裡沒日期的，改用資料夾最後 commit 日期補上
         var need = games.filter(function (g) { return !g.updated; });
         if (!need.length) return games;
@@ -480,13 +498,13 @@ window.Omni = (function () {
   /* ---------- 卡片渲染 ---------- */
   // 圖1 的遊戲卡
   function gameCard(g, isNew) {
-    return '<div class="gcard">' +
+    return '<div class="gcard' + (g.idea ? ' idea' : '') + '">' +
       (isNew ? '<div class="ribbon"><span>NEW</span></div>' : '') +
       '<div class="gcover">' +
-        // 沒有封面圖的遊戲直接只放佔位，不掛 <img>（不會產生失敗請求）
+        // 沒有封面圖的遊戲放佔位符號：優先用該遊戲網頁的 favicon emoji，抓不到才用 🎰
         (g.coverUrl
           ? '<img src="' + esc(g.coverUrl) + '" alt="" loading="lazy">'
-          : '<span class="ph">🎰</span>') +
+          : '<span class="ph">' + esc(g.icon || '🎰') + '</span>') +
         (g.hasDemo ? '' : '<div class="no-demo">尚無 Demo</div>') +
       '</div>' +
       '<div class="gbody">' +
@@ -512,10 +530,12 @@ window.Omni = (function () {
   function listCard(it) {
     var ext = isExternal(it.url);
     var showGid = it.game && String(it.title || "").indexOf(it.game) !== 0;
-    return '<a class="card ' + esc(it.cat) + '" href="' + esc(it.url) + '"' +
+    // data-kind 給 CSS 按標籤上色（例：其他報告裡的「數值報告」用玫瑰色，與琥珀色的其他報告區分）
+    var kindAttr = it.kind ? ' data-kind="' + esc(it.kind) + '"' : '';
+    return '<a class="card ' + esc(it.cat) + '"' + kindAttr + ' href="' + esc(it.url) + '"' +
            (ext ? '' : '') + '>' +
       '<div class="card-top">' +
-        '<span class="badge ' + esc(it.cat) + '">' + esc(it.kind || CAT_LABEL[it.cat] || it.cat) + '</span>' +
+        '<span class="badge ' + esc(it.cat) + '"' + kindAttr + '>' + esc(it.kind || CAT_LABEL[it.cat] || it.cat) + '</span>' +
         (showGid ? '<span class="gid">' + esc(it.game) + '</span>' : '') +
         (ext ? '<span class="ext">外部連結 ↗</span>' : '') +
       '</div>' +
@@ -559,9 +579,15 @@ window.Omni = (function () {
       var showGid = it.game && String(it.title || "").indexOf(it.game) !== 0;
       tag = showGid ? tagSpan("r-tag", it.game) : "";
     }
-    return '<a class="row ' + esc(it.cat) + '" href="' + esc(it.url) + '"' +
+    // 合併頁（_showKind）清單列開頭放分類／標籤 badge，混在一起才認得出來
+    var kindBadge = it._showKind
+      ? '<span class="badge ' + esc(it.cat) + '"' + (it.kind ? ' data-kind="' + esc(it.kind) + '"' : '') + '>' +
+          esc(it.kind || CAT_LABEL[it.cat] || it.cat) + '</span>'
+      : '';
+    return '<a class="row ' + esc(it.cat) + '"' + (it.kind ? ' data-kind="' + esc(it.kind) + '"' : '') +
+           ' href="' + esc(it.url) + '"' +
            (ext ? '' : '') + '>' +
-      tag +
+      kindBadge + tag +
       '<span class="r-title">' + esc(it.title) + '</span>' +
       (it.desc ? '<span class="r-desc">' + esc(it.desc) + '</span>' : '') +
       (it.date ? '<span class="r-meta">' + esc(it.date) + '</span>' : '') +

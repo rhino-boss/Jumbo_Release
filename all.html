@@ -8,8 +8,8 @@
 <link rel="alternate icon" href="assets/favicon.ico" sizes="any">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <meta name="theme-color" content="#2a3d5c">
-<!-- 改到 assets/ 裡的檔案時，這個 ?v=20261020c 要一起改（見 README「改 assets 記得改版號」） -->
-<link rel="stylesheet" href="assets/style.css?v=20261020c">
+<!-- 改到 assets/ 裡的檔案時，這個 ?v=20261020d 要一起改（見 README「改 assets 記得改版號」） -->
+<link rel="stylesheet" href="assets/style.css?v=20261020d">
 <title>Omniplay</title>
 </head>
 <body>
@@ -43,13 +43,14 @@
     <button class="sec-btn" type="button" id="view-toggle"></button>
   </div>
 
+  <div class="chips" id="chips" hidden></div>
   <div id="body"></div>
 </div>
 
 <footer>made with ☕ by c</footer>
 
-<script src="catalog.js?v=20261020c"></script>
-<script src="assets/app.js?v=20261020c"></script>
+<script src="catalog.js?v=20261020d"></script>
+<script src="assets/app.js?v=20261020d"></script>
 <script>
 (function () {
   /* 四個分類共用這一頁，用 ?cat= 決定內容。
@@ -88,6 +89,13 @@
     report: {
       label: "其他報告", sub: "機制說明、專題報告與各專案數值報告",
       placeholder: "搜尋標題、說明…",
+      unit: "份",
+      sorts: [{ key: "date", label: "日期" }, { key: "title", label: "名稱" }],
+      def: { key: "date", desc: true }
+    },
+    docs: {
+      label: "報告總覽", sub: "競品分析、專案須知、數值報告與其他報告，用標籤篩選",
+      placeholder: "搜尋標題、說明、標籤…",
       unit: "份",
       sorts: [{ key: "date", label: "日期" }, { key: "title", label: "名稱" }],
       def: { key: "date", desc: true }
@@ -162,9 +170,38 @@
     return out;
   }
 
+  /* 合併頁（cat=docs）的標籤篩選：null＝全部 */
+  var kindSel = null;
+  var KIND_COLOR = { "競品分析": "--cat-analysis", "專案須知": "--cat-spec",
+                     "數值報告": "--cat-numeric", "其他報告": "--cat-report" };
+  function kindOf(it) { return it.kind || Omni.CAT_LABEL[it.cat] || it.cat; }
+  function renderChips() {
+    var box = document.getElementById("chips");
+    if (cat !== "docs" || (loading && !items.length)) { box.hidden = true; return; }
+    var counts = {};
+    items.forEach(function (it) { var k = kindOf(it); counts[k] = (counts[k] || 0) + 1; });
+    var order = Object.keys(KIND_COLOR).filter(function (k) { return counts[k]; })
+      .concat(Object.keys(counts).filter(function (k) { return !(k in KIND_COLOR); }));
+    box.hidden = false;
+    box.innerHTML = '<button type="button" class="chip' + (kindSel === null ? ' on' : '') + '" data-k="">全部<span class="cnt">' + items.length + '</span></button>' +
+      order.map(function (k) {
+        var style = KIND_COLOR[k] ? ' style="--chip-c: var(' + KIND_COLOR[k] + ')"' : '';
+        return '<button type="button" class="chip' + (kindSel === k ? ' on' : '') + '" data-k="' + Omni.esc(k) + '"' + style + '>' +
+               Omni.esc(k) + '<span class="cnt">' + counts[k] + '</span></button>';
+      }).join("");
+  }
+  document.getElementById("chips").addEventListener("click", function (e) {
+    var chip = e.target.closest && e.target.closest(".chip");
+    if (!chip) return;
+    kindSel = chip.getAttribute("data-k") || null;
+    render();
+  });
+
   function render() {
     var q = qEl.value.trim().toLowerCase();
+    renderChips();
     var list = sorted(items.filter(function (it) {
+      if (cat === "docs" && kindSel && kindOf(it) !== kindSel) return false;
       return !q || Omni.haystackOf(it).indexOf(q) !== -1;
     }));
 
@@ -253,6 +290,13 @@
   } else if (cat === "spec") {
     Omni.loadSpecs().then(function (s) {
       items = s.map(function (i, n) { i._i = n; return i; }); loading = false; render();
+    });
+  } else if (cat === "docs") {
+    // 合併頁：競品分析＋專案須知＋其他報告（含數值報告）一次載入，清單列帶分類 badge
+    Promise.all([Omni.loadAnalysis(), Omni.loadSpecs()]).then(function (res) {
+      items = res[0].concat(res[1], manualOf("report"));
+      items.forEach(function (it, n) { it._i = n; it._showKind = true; });
+      loading = false; render();
     });
   } else {
     items = manualOf(cat);

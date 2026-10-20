@@ -8,8 +8,8 @@
 <link rel="alternate icon" href="assets/favicon.ico" sizes="any">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <meta name="theme-color" content="#2a3d5c">
-<!-- 改到 assets/ 裡的檔案時，這個 ?v=20261020c 要一起改（見 README「改 assets 記得改版號」） -->
-<link rel="stylesheet" href="assets/style.css?v=20261020c">
+<!-- 改到 assets/ 裡的檔案時，這個 ?v=20261020d 要一起改（見 README「改 assets 記得改版號」） -->
+<link rel="stylesheet" href="assets/style.css?v=20261020d">
 <title>Omniplay</title>
 </head>
 <body>
@@ -93,7 +93,7 @@
       <h2>競品分析</h2>
       <span class="n" id="n-analysis"></span>
       <div class="sec-actions">
-        <a class="sec-link" href="all.html?cat=analysis">完整頁 →</a>
+        <a class="sec-link" href="all.html?cat=docs">完整頁 →</a>
       </div>
     </div>
     <div class="grid" id="analysis-body"></div>
@@ -106,7 +106,7 @@
       <h2>專案須知</h2>
       <span class="n" id="n-spec"></span>
       <div class="sec-actions">
-        <a class="sec-link" href="all.html?cat=spec">完整頁 →</a>
+        <a class="sec-link" href="all.html?cat=docs">完整頁 →</a>
       </div>
     </div>
     <div class="grid" id="spec-body"></div>
@@ -119,7 +119,7 @@
       <h2>其他報告</h2>
       <span class="n" id="n-report"></span>
       <div class="sec-actions">
-        <a class="sec-link" href="all.html?cat=report">完整頁 →</a>
+        <a class="sec-link" href="all.html?cat=docs">完整頁 →</a>
       </div>
     </div>
     <div class="grid" id="report-body"></div>
@@ -141,8 +141,8 @@
 
 <footer>made with ☕ by c</footer>
 
-<script src="catalog.js?v=20261020c"></script>
-<script src="assets/app.js?v=20261020c"></script>
+<script src="catalog.js?v=20261020d"></script>
+<script src="assets/app.js?v=20261020d"></script>
 <script>
 (function () {
   /* 每區最多顯示幾筆，要看全部走「完整頁 →」。
@@ -236,28 +236,7 @@
     }).join("");
   }
 
- /* ---------- 遊戲發想區：用競品分析那種卡（listCard） ---------- */
-  function renderIdeaCards(q, emptyMsg) {
-    var body = document.getElementById("idea-body");
-    var pool = ideaGames();
-    var list = pool.filter(function (g) { return matches(g, q); });
-    var busy = loading.demo && !games.length;
-    setCount("idea", busy ? null : list.length + " 款");
-    body.className = "grid";
-    if (busy) { body.innerHTML = emptyBox("正在載入…"); return; }
-    if (!list.length) { body.innerHTML = emptyBox(q ? "沒有符合的遊戲。" : emptyMsg); return; }
-    body.innerHTML = limit(list, "idea", q).map(function (g) {
-      var item = Omni.gameAsItem(g);
-      // 點卡片要能直接玩：有 demo 連 demo，沒有才退回規則書；兩者都沒有就不做成連結
-      item.url = g.hasDemo ? g.playUrl : (g.ruleUrl || "");
-      item.desc = g.play || "—";
-      var html = Omni.listCard(item);
-      if (!item.url) html = "<div " + html.slice(3, -4).replace(' href=""', "") + "</div>";
-      return html;
-    }).join("");
-  }
-
-  /* ---------- 卡片區（競品分析、其他報告） ---------- */
+ /* ---------- 卡片區（競品分析、其他報告） ---------- */
   function renderCards(id, items, q, unit, emptyMsg) {
     var body = document.getElementById(id + "-body");
     var list = items.filter(function (i) { return matches(i, q); });
@@ -285,7 +264,8 @@
     var q = qEl.value.trim().toLowerCase();
     renderTop();
     renderGameRail("demo", demoGames(), q, "掃不到任何遊戲。");
-    renderIdeaCards(q,
+    // 遊戲發想區用跟 Demogame 一樣的遊戲卡（紫色頂條區分；無封面圖時用該遊戲網頁的 favicon 符號）
+    renderGameRail("idea", ideaGames(), q,
       "還沒有發想中的遊戲 — 在 Slots/遊戲發想/ 開一個遊戲資料夾就會出現在這裡。");
     renderCards("analysis", analysis.slice().sort(byDateDesc), q, "份", "掃不到任何競品分析。");
     renderCards("spec", specs, q, "份", "掃不到任何規範文件（專案需知/）。");
