@@ -471,8 +471,8 @@ window.Omni = (function () {
   /* ---------- 專案須知：只列 專案需知/ 裡編譯好的 *.html 完整規範
      （各 .md 是它的來源章節，由 其他/_build_html.py 合併成網頁版，不另外列） ---------- */
   // 顯示名稱；沒列到的檔案就用檔名（底線換空白）
-  var SPEC_TITLE = { igaming_specification: "iGaming 開發規範", omniplay_specification: "Omniplay 開發規範", landbase_specification: "Landbase 開發規範", reskin_specification: "Reskin 開發規範" };
-  var SPEC_ORDER = ["igaming_specification", "omniplay_specification", "landbase_specification", "reskin_specification"];
+  var SPEC_TITLE = { igaming_specification: "iGaming 開發規範（入口）", omniplay_specification: "Omniplay 開發規範", landbase_specification: "Landbase 開發規範", reskin_specification: "Reskin 開發規範" };
+  var SPEC_ORDER = ["igaming_specification", "omniplay_specification", "landbase_specification", "reskin_specification", "開發需知"];
   function specItem(f, group) {
     var base = f.name.replace(/\.html?$/i, "");
     var rel = SPEC_PATH + "/" + (group ? group + "/" : "") + f.name;
@@ -480,9 +480,9 @@ window.Omni = (function () {
     return {
       title: SPEC_TITLE[base] || base.replace(/_/g, " "),
       url: PAGES_BASE + "/" + encPath(rel),
-      cat: "spec", game: group || "",
+      cat: "spec", game: (group || "").split("/").pop(),
       desc: "完整規範（網頁版）",
-      date: "", tags: [group || "Slot"],
+      date: "", tags: [(group || "Slot").split("/").pop()],
       _order: order < 0 ? 99 : order
     };
   }
@@ -491,15 +491,20 @@ window.Omni = (function () {
       var files = top.filter(function (i) {
         return i.type === "file" && /\.html?$/i.test(i.name) && !/^_/.test(i.name);
       }).map(function (f) { return specItem(f, ""); });
-      // 子資料夾（Landbase 等）各掃一層；「其他」放的是建置腳本，不列
-      var subs = top.filter(function (i) { return i.type === "dir" && i.name !== "其他"; });
-      return Promise.all(subs.map(function (d) {
-        return fetchJson(SPEC_API + "/" + encodeURIComponent(d.name)).then(function (list) {
-          return list.filter(function (i) {
+      // 子資料夾往下掃兩層（開發需知/、開發規範/Omniplay／Landbase／Reskin）；「其他」放的是建置腳本，不列
+      function scanDir(path, depth) {
+        return fetchJson(SPEC_API + "/" + path.split("/").map(encodeURIComponent).join("/")).then(function (list) {
+          var here = list.filter(function (i) {
             return i.type === "file" && /\.html?$/i.test(i.name) && !/^_/.test(i.name);
-          }).map(function (f) { return specItem(f, d.name); });
+          }).map(function (f) { return specItem(f, path); });
+          if (depth <= 1) return here;
+          return Promise.all(list.filter(function (i) { return i.type === "dir"; })
+            .map(function (d) { return scanDir(path + "/" + d.name, depth - 1); }))
+            .then(function (deeper) { return here.concat.apply(here, deeper); });
         }).catch(function () { return []; });
-      })).then(function (groups) {
+      }
+      var subs = top.filter(function (i) { return i.type === "dir" && i.name !== "其他"; });
+      return Promise.all(subs.map(function (d) { return scanDir(d.name, 2); })).then(function (groups) {
         var out = files.concat.apply(files, groups);
         out.sort(function (a, b) { return a._order - b._order || a.title.localeCompare(b.title); });
         saveList("omniplay-specs", out);
