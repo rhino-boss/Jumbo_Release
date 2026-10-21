@@ -268,7 +268,7 @@ window.Omni = (function () {
           if (m) { hasManifest[m[1]] = true; return; }
           m = n.path.match(/^(.+)\/修改紀錄\.md$/);
           if (m) { hasLog[m[1]] = true; return; }
-          // 數值文件：各遊戲 其他/數值報告*.html（同一款有多份時取檔名排序最後的）
+          // 數值報告：各遊戲 其他/數值報告*.html（同一款有多份時取檔名排序最後的）
           m = n.path.match(/^(.+)\/其他\/(數值報告[^/]*\.html)$/);
           if (m) { if (!numReport[m[1]] || m[2] > numReport[m[1]]) numReport[m[1]] = m[2]; return; }
           m = n.path.match(/遊戲資源\/([A-Za-z0-9]+)\.png$/);
@@ -316,11 +316,11 @@ window.Omni = (function () {
               ruleUrl: rule.hasRule
                 ? BLOB_BASE + "/" + encPath(SLOTS_PATH + "/" + folder) + "/game_rule.md"
                 : "",
-              // 「遊戲資訊」選單：規範（git 上的 spec）／自己寫的 game_rule／數值文件，沒有的檔不列
+              // 「遊戲資訊」選單：規範（git 上的 spec）／自己寫的 game_rule／數值報告，沒有的檔不列
               docs: [
                 { label: "開發規範 (Spec)", url: SPEC_URL },
                 rule.hasRule ? { label: "Game Rule", url: BLOB_BASE + "/" + encPath(SLOTS_PATH + "/" + folder) + "/game_rule.md" } : null,
-                numReport[folder] ? { label: "數值文件", url: gameBase + "/" + encodeURIComponent("其他") + "/" + encodeURIComponent(numReport[folder]) } : null
+                numReport[folder] ? { label: "數值報告", url: gameBase + "/" + encodeURIComponent("其他") + "/" + encodeURIComponent(numReport[folder]) } : null
               ].filter(Boolean)
             };
           });
