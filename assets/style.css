@@ -371,7 +371,7 @@ nav .current { color: #fff; font-weight: 600; font-size: .85rem; }
 .row.demo .r-tag, .row.idea .r-tag,
 .row.demo .badge, .row.idea .badge { flex: none; box-sizing: border-box; min-width: 72px; text-align: center; }
 .row.demo .r-title, .row.idea .r-title {
-  flex: 0 0 190px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  flex: 0 0 148px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;   /* 最長的「H026 彩罐熱舞 1000」約 132px，留一點縫就好 */
 }
 @media (max-width: 640px) {
   .row { flex-wrap: wrap; gap: 6px 10px; }
