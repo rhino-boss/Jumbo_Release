@@ -93,7 +93,7 @@ window.Omni = (function () {
       var ln = all.match(/(\d+)\s*(?:line|lines|線|條線)/i);
       if (ln) mech = ln[1] + " Lines";
     }
-    if (!mech) return type;
+    if (!mech) return type ? (/op\s*jackpot/i.test(type) ? type : type + " / OP Jackpot") : "OP Jackpot";
 
     var extras = type.split(/\s*\/\s*|\s+[-–—]\s+/).map(function (s) { return s.trim(); })
       .filter(function (s) {
@@ -107,12 +107,15 @@ window.Omni = (function () {
       });
 
     var seen = {};
-    return [mech].concat(extras).filter(function (s) {
+    var parts = [mech].concat(extras).filter(function (s) {
       var k = s.toLowerCase().replace(/[\s,]/g, "");
       if (seen[k]) return false;
       seen[k] = true;
       return true;
-    }).join(" / ");
+    });
+    // 所有遊戲都接 OP Jackpot：規則書沒寫的也補在最後
+    if (!seen["opjackpot"]) parts.push("OP Jackpot");
+    return parts.join(" / ");
   }
 
   function parseFolderName(name) {
