@@ -367,8 +367,14 @@ nav .current { color: #fff; font-weight: 600; font-size: .85rem; }
   margin-left: auto; flex: none; font-size: .76rem; color: var(--text-secondary);
   font-variant-numeric: tabular-nums;
 }
+/* 遊戲列：標籤、名稱、玩法三欄對齊（標籤與名稱固定寬） */
+.row.demo .r-tag, .row.idea .r-tag { min-width: 60px; text-align: center; }
+.row.demo .r-title, .row.idea .r-title {
+  flex: 0 0 190px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
 @media (max-width: 640px) {
   .row { flex-wrap: wrap; gap: 6px 10px; }
+  .row.demo .r-title, .row.idea .r-title { flex: 1 1 auto; }
   .row .r-desc { flex: 1 1 100%; white-space: normal; }
   .row .r-meta { margin-left: 0; }
 }
