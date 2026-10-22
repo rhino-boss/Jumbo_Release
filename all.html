@@ -8,8 +8,8 @@
 <link rel="alternate icon" href="assets/favicon.ico" sizes="any">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <meta name="theme-color" content="#2a3d5c">
-<!-- 改到 assets/ 裡的檔案時，這個 ?v=20261021f 要一起改（見 README「改 assets 記得改版號」） -->
-<link rel="stylesheet" href="assets/style.css?v=20261021f">
+<!-- 改到 assets/ 裡的檔案時，這個 ?v=20261022a 要一起改（見 README「改 assets 記得改版號」） -->
+<link rel="stylesheet" href="assets/style.css?v=20261022a">
 <title>Omniplay</title>
 </head>
 <body>
@@ -49,8 +49,8 @@
 
 <footer>made with ☕ by c</footer>
 
-<script src="catalog.js?v=20261021f"></script>
-<script src="assets/app.js?v=20261021f"></script>
+<script src="catalog.js?v=20261022a"></script>
+<script src="assets/app.js?v=20261022a"></script>
 <script>
 (function () {
   /* 四個分類共用這一頁，用 ?cat= 決定內容。
@@ -101,7 +101,7 @@
       def: { key: "date", desc: true }
     },
     games: {
-      label: "遊戲總覽", sub: "開發中與發想中的遊戲，用標籤篩選",
+      label: "遊戲總覽", sub: "正式專案、開發完成、遊戲發想、克隆遊戲，用標籤篩選",
       placeholder: "搜尋遊戲名稱、代號、玩法、版本…",
       unit: "款",
       sorts: [{ key: "date", label: "文件日期" }, { key: "id", label: "代號" }],
@@ -180,7 +180,7 @@
   /* 合併頁（cat=docs／cat=games）的標籤篩選：null＝全部 */
   var MERGED = { docs: true, games: true };
   var kindSel = null;
-  var KIND_COLOR = { "開發中": "--cat-demo", "遊戲發想": "--cat-idea",
+  var KIND_COLOR = { "正式專案": "--cat-demo", "開發完成": "--cat-done", "遊戲發想": "--cat-idea", "克隆遊戲": "--cat-clone",
                      "競品分析": "--cat-analysis", "專案須知": "--cat-spec",
                      "數值報告": "--cat-numeric", "其他": "--cat-report" };
   function kindOf(it) { return it.kind || Omni.CAT_LABEL[it.cat] || it.cat; }

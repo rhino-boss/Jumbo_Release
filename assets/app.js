@@ -39,7 +39,7 @@ window.Omni = (function () {
   var SPEC_API = API_BASE + "/contents/" + encPath(SPEC_PATH);
   var SPEC_URL = PAGES_BASE + "/" + encPath(SPEC_PATH) + "/igaming_specification.html";   // Slot 遊戲共用的開發規範
 
-  var CAT_LABEL = { demo: "開發中", idea: "遊戲發想", analysis: "競品分析", spec: "專案須知", report: "其他", links: "常用連結" };
+  var CAT_LABEL = { demo: "正式專案", idea: "遊戲發想", analysis: "競品分析", spec: "專案須知", report: "其他", links: "常用連結" };
 
   var notes = [];
 
@@ -126,8 +126,8 @@ window.Omni = (function () {
   /* game_rule.md 的表格列：| 遊戲類型 | Video Slot - 1,024 Ways / Cascade |
      另外抓「> 撰寫日期：2026-08-11」——
      沒有 修改紀錄.md 的遊戲就靠它當文件日期（見 fetchLogDate 上方說明）。 */
-  function fetchPlay(gameBase) {
-    return fetchText(gameBase + "/game_rule.md").then(function (text) {
+  function fetchPlay(gameBase, ruleName) {
+    return fetchText(gameBase + "/" + encodeURIComponent(ruleName || "game_rule.md")).then(function (text) {
       if (!text) return { play: "", hasRule: false, docDate: 0 };
       var cell = function (label) {
         var m = text.match(new RegExp("\\|\\s*" + label + "\\s*\\|([^|\\n]*)\\|"));
@@ -263,7 +263,7 @@ window.Omni = (function () {
         /* 整棵樹已經在手上，所以 demo／版本檔／封面圖在不在都直接從樹判斷，
            不必先打再看 404 — 省下多餘請求，也不會在 console 留紅字。
            key 一律是「遊戲資料夾相對 Slots 的路徑」（發想遊戲帶 遊戲發想/ 前綴）。 */
-        var hasDemo = {}, hasManifest = {}, hasCover = {}, hasLog = {}, numReport = {};
+        var hasDemo = {}, hasManifest = {}, hasCover = {}, hasLog = {}, numReport = {}, ruleFile = {};
         nodes.forEach(function (n) {
           var m = n.path.match(/^(.+)\/index\.html$/);
           if (m) { hasDemo[m[1]] = true; return; }
@@ -271,6 +271,8 @@ window.Omni = (function () {
           if (m) { hasManifest[m[1]] = true; return; }
           m = n.path.match(/^(.+)\/修改紀錄\.md$/);
           if (m) { hasLog[m[1]] = true; return; }
+          m = n.path.match(/^(.+)\/(game_rule[^/]*\.md)$/);
+          if (m && !/\/Versions\//.test(m[1])) { if (!ruleFile[m[1]] || m[2] === "game_rule.md") ruleFile[m[1]] = m[2]; return; }
           // 數值報告：各遊戲 其他/數值報告*.html（同一款有多份時取檔名排序最後的）
           m = n.path.match(/^(.+)\/其他\/(數值報告[^/]*\.html)$/);
           if (m) { if (!numReport[m[1]] || m[2] > numReport[m[1]]) numReport[m[1]] = m[2]; return; }
@@ -278,36 +280,41 @@ window.Omni = (function () {
           if (m) hasCover[m[1]] = true;
         });
 
-        /* 兩種遊戲資料夾：
-             頂層 代號_名稱               → Demogame（照舊）
-             遊戲發想/<遊戲名>            → 沒有 Game ID＝發想中的遊戲 */
+        /* 三種遊戲資料夾：
+             頂層 代號_名稱               → 正式專案／開發完成（看 DEV_GAMES）
+             遊戲發想/<遊戲名>            → 沒有 Game ID＝發想中的遊戲
+             其他遊戲/克隆遊戲/<遊戲名>   → 克隆遊戲（只在完整頁列） */
         var CODE_RE = /^[A-Za-z0-9]+_[^/]+$/;
         var IDEA_RE = /^遊戲發想\/[^/]+$/;
+        var CLONE_RE = /^其他遊戲\/克隆遊戲\/[^/]+$/;
+        // 還在開發中的正式專案；其餘有代號的遊戲一律視為「開發完成」
+        var DEV_GAMES = ["H027", "H045"];
         // 不列在入口頁的遊戲資料夾（實驗分支、暫存副本等）
         var HIDE_FOLDERS = ["H045_超級鑽石_2"];
         var folders = nodes.filter(function (n) {
           return n.type === "tree" && HIDE_FOLDERS.indexOf(n.path) === -1 &&
-                 (CODE_RE.test(n.path) || IDEA_RE.test(n.path));
+                 (CODE_RE.test(n.path) || IDEA_RE.test(n.path) || CLONE_RE.test(n.path));
         }).map(function (n) { return n.path; });
 
         // 全部都是同源的 Pages 靜態檔，可以一次平行抓完，不吃 API 額度
         return Promise.all(folders.map(function (folder) {
           var gameBase = PAGES_BASE + "/" + encPath(SLOTS_PATH + "/" + folder);
           return Promise.all([
-            fetchPlay(gameBase),
+            fetchPlay(gameBase, ruleFile[folder]),
             hasManifest[folder] ? fetchVersion(gameBase) : Promise.resolve(""),
             fetchLogDate(gameBase, hasLog[folder])
           ]);
         })).then(function (statics) {
           return folders.map(function (folder, i) {
-            var idea = IDEA_RE.test(folder);
-            // 發想遊戲的資料夾名就是遊戲名，沒有 Game ID
-            var info = idea ? { id: "", name: folder.split("/").pop() } : parseFolderName(folder);
+            var idea = IDEA_RE.test(folder), clone = CLONE_RE.test(folder);
+            // 發想／克隆遊戲的資料夾名就是遊戲名，沒有 Game ID
+            var info = (idea || clone) ? { id: "", name: folder.split("/").pop() } : parseFolderName(folder);
+            var kind = idea ? "遊戲發想" : clone ? "克隆遊戲" : DEV_GAMES.indexOf(info.id) !== -1 ? "正式專案" : "開發完成";
             var gameBase = PAGES_BASE + "/" + encPath(SLOTS_PATH + "/" + folder);
             var rule = statics[i][0], version = statics[i][1], logDate = statics[i][2];
             return {
               folder: folder, id: info.id, name: info.name,
-              idea: idea,
+              idea: idea, clone: clone, kind: kind,
               play: rule.play, version: version,
               // 修改紀錄的最新日期優先，沒有就退回 game_rule.md 的撰寫日期
               updated: logDate || rule.docDate || 0,
@@ -317,12 +324,12 @@ window.Omni = (function () {
               coverUrl: hasCover[info.id]
                 ? COVER_BASE + "/" + encodeURIComponent(info.id) + ".png" : "",
               ruleUrl: rule.hasRule
-                ? BLOB_BASE + "/" + encPath(SLOTS_PATH + "/" + folder) + "/game_rule.md"
+                ? BLOB_BASE + "/" + encPath(SLOTS_PATH + "/" + folder) + "/" + encodeURIComponent(ruleFile[folder] || "game_rule.md")
                 : "",
               // 「遊戲資訊」選單：規範（git 上的 spec）／自己寫的 game_rule／數值報告，沒有的檔不列
               docs: [
                 { label: "開發規範 (Spec)", url: SPEC_URL },
-                rule.hasRule ? { label: "Game Rule", url: BLOB_BASE + "/" + encPath(SLOTS_PATH + "/" + folder) + "/game_rule.md" } : null,
+                rule.hasRule ? { label: "Game Rule", url: BLOB_BASE + "/" + encPath(SLOTS_PATH + "/" + folder) + "/" + encodeURIComponent(ruleFile[folder] || "game_rule.md") } : null,
                 numReport[folder] ? { label: "數值報告", url: gameBase + "/" + encodeURIComponent("其他") + "/" + encodeURIComponent(numReport[folder]) } : null
               ].filter(Boolean)
             };
@@ -625,7 +632,7 @@ window.Omni = (function () {
   // 遊戲轉成圖4 那種卡的資料形狀
   function gameAsItem(g) {
     return {
-      title: (g.id ? g.id + " " + g.name : g.name), url: g.playUrl, cat: g.idea ? "idea" : "demo",
+      title: (g.id ? g.id + " " + g.name : g.name), url: g.playUrl, cat: g.idea ? "idea" : "demo", kind: g.kind,
       game: g.id, desc: g.play, date: g.updated ? new Date(g.updated).toISOString().slice(0, 10) : "",
       tags: g.version ? [g.version] : []
     };
