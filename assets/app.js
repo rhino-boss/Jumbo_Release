@@ -347,7 +347,9 @@ window.Omni = (function () {
               var svg = "";
               try { svg = decodeURIComponent(href[1]); } catch (e) { return; }
               var t = svg.match(/<text[^>]*>\s*([^<]+?)\s*<\/text>/);
-              if (t) g.icon = t[1];
+              // 純 emoji 的 favicon 直接當文字放；手繪 SVG（例：Cubes）就整張 data URI 當圖
+              if (t && !/<(path|rect|circle|polygon|g)\b/i.test(svg)) g.icon = t[1];
+              else g.iconSrc = href[1].replace(/&amp;/g, "&");
             })
             .catch(function () {});
         })).then(function () { return games; });
@@ -537,7 +539,9 @@ window.Omni = (function () {
         // 沒有封面圖的遊戲放佔位符號：優先用該遊戲網頁的 favicon emoji，抓不到才用 🎰
         (g.coverUrl
           ? '<img src="' + esc(g.coverUrl) + '" alt="" loading="lazy">'
-          : '<span class="ph">' + esc(g.icon || '🎰') + '</span>') +
+          : g.iconSrc
+            ? '<span class="ph"><img class="ph-img" src="' + esc(g.iconSrc) + '" alt=""></span>'
+            : '<span class="ph">' + esc(g.icon || '🎰') + '</span>') +
         (g.hasDemo ? '' : '<div class="no-demo">尚無 Demo</div>') +
       '</div>' +
       '<div class="gbody">' +
