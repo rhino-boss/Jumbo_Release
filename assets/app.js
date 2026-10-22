@@ -281,14 +281,12 @@ window.Omni = (function () {
         });
 
         /* 三種遊戲資料夾：
-             頂層 代號_名稱               → 正式專案／開發完成（看 DEV_GAMES）
+             頂層 代號_名稱               → 正式專案（有代號的一律算正式專案）
              遊戲發想/<遊戲名>            → 沒有 Game ID＝發想中的遊戲
              其他遊戲/克隆遊戲/<遊戲名>   → 克隆遊戲（只在完整頁列） */
         var CODE_RE = /^[A-Za-z0-9]+_[^/]+$/;
         var IDEA_RE = /^遊戲發想\/[^/]+$/;
         var CLONE_RE = /^其他遊戲\/克隆遊戲\/[^/]+$/;
-        // 還在開發中的正式專案；其餘有代號的遊戲一律視為「開發完成」
-        var DEV_GAMES = ["H027", "H045"];
         // 不列在入口頁的遊戲資料夾（實驗分支、暫存副本等）
         var HIDE_FOLDERS = ["H045_超級鑽石_2"];
         var folders = nodes.filter(function (n) {
@@ -309,7 +307,7 @@ window.Omni = (function () {
             var idea = IDEA_RE.test(folder), clone = CLONE_RE.test(folder);
             // 發想／克隆遊戲的資料夾名就是遊戲名，沒有 Game ID
             var info = (idea || clone) ? { id: "", name: folder.split("/").pop() } : parseFolderName(folder);
-            var kind = idea ? "遊戲發想" : clone ? "克隆遊戲" : DEV_GAMES.indexOf(info.id) !== -1 ? "正式專案" : "開發完成";
+            var kind = idea ? "遊戲發想" : clone ? "克隆遊戲" : "正式專案";
             var gameBase = PAGES_BASE + "/" + encPath(SLOTS_PATH + "/" + folder);
             var rule = statics[i][0], version = statics[i][1], logDate = statics[i][2];
             return {

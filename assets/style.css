@@ -17,7 +17,6 @@
   --cat-all: #9ba3af;
   --cat-demo: #4a7fd0;        /* 藍 — Demogame */
   --cat-idea: #8e6bc1;        /* 紫 — 遊戲發想 */
-  --cat-done: #3a8a50;        /* 綠 — 開發完成 */
   --cat-clone: #2a8a8a;       /* 青 — 克隆遊戲 */
   --cat-analysis: #d9534f;    /* 紅 — 分析報告 */
   --cat-spec: #2a8a74;        /* 青綠 — 專案須知 */
@@ -321,7 +320,6 @@ nav .current { color: #fff; font-weight: 600; font-size: .85rem; }
 .badge.report { color: #9a6c17; background: #fbf2e2; }
 .badge.links { color: #4a6e50; background: #eaf2eb; }
 .badge[data-kind="數值報告"] { color: #a03d68; background: #faeaf1; }
-.badge[data-kind="開發完成"] { color: #2b6b3e; background: #e6f4ea; }
 .badge[data-kind="克隆遊戲"] { color: #1f6b6b; background: #e4f3f3; }
 .gid { font-size: .72rem; font-weight: 700; color: var(--text-secondary); font-variant-numeric: tabular-nums; }
 .ext { margin-left: auto; font-size: .66rem; color: var(--text-secondary); opacity: .8; }
