@@ -342,7 +342,8 @@ window.Omni = (function () {
           return fetch(g.playUrl + "index.html", { headers: { Range: "bytes=0-2047" } })
             .then(function (r) { return r.ok ? r.text() : ""; })
             .then(function (head) {
-              var href = head.match(/rel=["']icon["'][^>]*href=["']([^"']*)["']/i);
+              // data URI 裡常有單引號（xmlns='…'），所以要依外層引號配對，不能用 [^"']
+              var href = head.match(/rel=["']icon["'][^>]*href="([^"]*)"/i) || head.match(/rel=["']icon["'][^>]*href='([^']*)'/i);
               if (!href) return;
               var svg = "";
               try { svg = decodeURIComponent(href[1]); } catch (e) { return; }
