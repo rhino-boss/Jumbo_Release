@@ -31,6 +31,20 @@
 window.CATALOG = [
   /* ---- 其他報告：數值報告（各專案 其他/數值報告_<遊戲中文名>.html；規則見 專案需知/開發流程.md §5.9）---- */
   {
+    title: "雷神爆金", kind: "數值報告",
+    url: "https://rhino-boss.github.io/Jumbo/Slots/H028_雷神爆金/其他/數值報告_雷神爆金.html",
+    cat: "report", game: "H028",
+    desc: "Thunder Boost vs PG Lucky Neko：核心指標、倍率線型、連消、M1 倍數、BF 回收、得分區間",
+    date: "2026-10-22"
+  },
+  {
+    title: "超級寶石", kind: "數值報告",
+    url: "https://rhino-boss.github.io/Jumbo/Slots/H020_超級寶石/其他/數值報告_超級寶石.html",
+    cat: "report", game: "H020",
+    desc: "Super Gems vs 前作 1.0.1.3（競品 JILI Fortune Gems）：倍率線型、符號消除、BF 回收、R4 倍數與重轉",
+    date: "2026-10-22"
+  },
+  {
     title: "宙斯 2500", kind: "數值報告",
     url: "https://rhino-boss.github.io/Jumbo/Slots/H027_宙斯%202500/其他/數值報告_宙斯%202500.html",
     cat: "report", game: "H027",
