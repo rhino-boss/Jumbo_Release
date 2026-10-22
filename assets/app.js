@@ -285,8 +285,8 @@ window.Omni = (function () {
              其他/其他遊戲/遊戲發想/<遊戲名>   → 沒有 Game ID＝發想中的遊戲
              其他/其他遊戲/克隆遊戲/<遊戲名>   → 克隆遊戲（只在完整頁列） */
         var CODE_RE = /^[A-Za-z0-9]+_[^/]+$/;
-        var IDEA_RE = /^遊戲發想\/[^/]+$/;
-        var CLONE_RE = /^其他遊戲\/克隆遊戲\/[^/]+$/;
+        var IDEA_RE = /^其他\/其他遊戲\/遊戲發想\/[^/]+$/;
+        var CLONE_RE = /^其他\/其他遊戲\/克隆遊戲\/[^/]+$/;
         // 不列在入口頁的遊戲資料夾（實驗分支、暫存副本等）
         var HIDE_FOLDERS = ["H045_超級鑽石_2"];
         var folders = nodes.filter(function (n) {
