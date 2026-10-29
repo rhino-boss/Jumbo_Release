@@ -482,8 +482,8 @@ window.Omni = (function () {
   /* ---------- 專案須知：只列 專案需知/ 裡編譯好的 *.html 完整規範
      （各 .md 是它的來源章節，由 其他/_build_html.py 合併成網頁版，不另外列） ---------- */
   // 顯示名稱；沒列到的檔案就用檔名（底線換空白）
-  var SPEC_TITLE = { igaming_specification: "iGaming 開發規範（入口）", omniplay_specification: "Omniplay 開發規範", landbase_specification: "Landbase 開發規範", reskin_specification: "Reskin 開發規範", mine_specification: "Mine 開發規範" };
-  var SPEC_ORDER = ["igaming_specification", "omniplay_specification", "landbase_specification", "reskin_specification", "mine_specification", "開發流程"];
+  var SPEC_TITLE = { igaming_specification: "iGaming 開發規範（入口）", omniplay_specification: "Omniplay 開發規範", landbase_specification: "Landbase 開發規範", reskin_specification: "Reskin 開發規範", development_process: "開發流程" };
+  var SPEC_ORDER = ["igaming_specification", "omniplay_specification", "landbase_specification", "reskin_specification", "development_process"];
   function specItem(f, group) {
     var base = f.name.replace(/\.html?$/i, "");
     var rel = SPEC_PATH + "/" + (group ? group + "/" : "") + f.name;
