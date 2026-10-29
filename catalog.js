@@ -68,6 +68,13 @@ window.CATALOG = [
 
   /* ---- 其他報告：機制說明／專題 ---- */
   {
+    title: "熱門遊戲數值分析", kind: "其他",
+    url: "https://rhino-boss.github.io/Jumbo/其他任務/261028_三款遊戲數值分析/熱門遊戲數值分析.html",
+    cat: "report", game: "H026",
+    desc: "彩罐熱舞 1000 vs Acewin 三款熱門遊戲：核心指標、單局分級、乾旱期、門檻機率、BF 離場分布、倍率線型",
+    date: "2026-10-29"
+  },
+  {
     title: "老手救援 C3 (正式報告)",
     url: "https://rhino-boss.github.io/Jumbo/System/報告/機制報告_老手救援.html",
     cat: "report",
