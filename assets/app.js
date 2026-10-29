@@ -482,7 +482,9 @@ window.Omni = (function () {
   /* ---------- 專案須知：只列 專案需知/ 裡編譯好的 *.html 完整規範
      （各 .md 是它的來源章節，由 其他/_build_html.py 合併成網頁版，不另外列） ---------- */
   // 顯示名稱；沒列到的檔案就用檔名（底線換空白）
-  var SPEC_TITLE = { igaming_specification: "iGaming 開發需知（入口）", omniplay_specification: "Omniplay 開發規範", landbase_specification: "Landbase 開發規範", reskin_specification: "Reskin 開發規範", development_process: "開發流程" };
+  var SPEC_TITLE = { igaming_specification: "開發需知", omniplay_specification: "Omniplay 開發規範", landbase_specification: "Landbase 開發規範", reskin_specification: "Reskin 開發規範", development_process: "開發流程" };
+  // 給其他人看的網頁：標籤改「對外文件」（另一種顏色）
+  var SPEC_EXTERNAL = ["omniplay_specification", "landbase_specification", "reskin_specification", "development_process"];
   var SPEC_ORDER = ["igaming_specification", "omniplay_specification", "landbase_specification", "reskin_specification", "development_process"];
   function specItem(f, group) {
     var base = f.name.replace(/\.html?$/i, "");
@@ -491,7 +493,7 @@ window.Omni = (function () {
     return {
       title: SPEC_TITLE[base] || base.replace(/_/g, " "),
       url: PAGES_BASE + "/" + encPath(rel),
-      cat: "spec", game: (group || "").split("/").pop(),
+      cat: "spec", kind: SPEC_EXTERNAL.indexOf(base) >= 0 ? "對外文件" : "", game: (group || "").split("/").pop(),
       desc: "完整規範（網頁版）",
       date: "", tags: [(group || "Slot").split("/").pop()],
       _order: order < 0 ? 99 : order
