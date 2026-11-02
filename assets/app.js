@@ -566,6 +566,35 @@ window.Omni = (function () {
     '</div>';
   }
 
+  /* 載入中的骨架卡：結構、間距與真卡片相同，所以高度一樣，
+     資料回來替換時版面不會跳。n 張；isGame 用遊戲卡的形狀。 */
+  function skeletonCards(n, isGame, opts) {
+    opts = opts || {};
+    var lines = opts.lines || 2;              // 一般卡說明文字的行數（決定高度）
+    var withDate = opts.date !== false;       // 一般卡是否有日期列
+    var one = isGame
+      ? '<div class="gcard skel" aria-hidden="true">' +
+          '<div class="gcover"></div>' +
+          '<div class="gbody"><div class="gtitle"><span class="skel-bar"></span></div>' +
+          '<div class="gdesc"><span class="skel-bar"></span></div></div>' +
+          '<div class="gfoot"><div class="btn">　</div><div class="btn">　</div></div>' +
+        '</div>'
+      : '<div class="card skel" aria-hidden="true">' +
+          '<div class="card-top"><span class="badge skel-bar"></span></div>' +
+          '<h2><span class="skel-bar"></span></h2>' +
+          '<p><span class="skel-bar" style="height:' + (19 * lines) + 'px"></span></p>' +
+          (withDate ? '<div class="card-date"><span class="skel-bar"></span></div>' : '') +
+        '</div>';
+    var out = "";
+    for (var i = 0; i < n; i++) out += one;
+    return out;
+  }
+  function skeletonRows(n) {
+    var out = "";
+    for (var i = 0; i < n; i++) out += '<div class="row skel" aria-hidden="true"><span class="skel-bar"></span></div>';
+    return out;
+  }
+
   // 圖4 的一般卡；標題開頭已是代號時不重複顯示
   function listCard(it) {
     var ext = isExternal(it.url);
@@ -682,6 +711,8 @@ window.Omni = (function () {
     loadAnalysis: loadAnalysis,
     loadSpecs: loadSpecs,
     gameCard: gameCard,
+    skeletonCards: skeletonCards,
+    skeletonRows: skeletonRows,
     listCard: listCard,
     linkCard: linkCard,
     rowItem: rowItem,

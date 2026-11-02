@@ -181,6 +181,32 @@ nav .current { color: #fff; font-weight: 600; font-size: .85rem; }
   border: 1px dashed var(--border); border-radius: 12px;
 }
 
+/* ── 載入中的骨架卡 ──
+   跟真卡片同尺寸的灰色占位，讓各區在 GitHub 回應前就先撐好高度，
+   資料回來只是換內容、不會整頁往下長（原本是一個矮的「正在載入…」框）。 */
+@keyframes skel-shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+.skel, .skel * { pointer-events: none; }
+.skel-bar {
+  display: block; border-radius: 6px;
+  background: linear-gradient(90deg, var(--surface-2) 25%, #f6f6f4 50%, var(--surface-2) 75%);
+  background-size: 200% 100%; animation: skel-shimmer 1.4s linear infinite;
+}
+.gcard.skel { box-shadow: none; }
+.gcard.skel:hover { transform: none; }
+.gcard.skel .gcover { background: var(--surface-2); }
+/* 高度對齊真卡片：標題一行 23px、說明兩行 37px（.gdesc 的 min-height 另會撐底） */
+.gcard.skel .gtitle .skel-bar { width: 46%; height: 23px; margin: 0 auto; }
+.gcard.skel .gdesc .skel-bar { width: 70%; height: 37px; }
+.gcard.skel .btn { background: var(--surface-2); border: 0; color: transparent; }
+.card.skel { box-shadow: none; --accent: var(--border); }
+.card.skel:hover { transform: none; }
+.card.skel .badge { width: 58px; height: 17px; border-radius: 99px; }
+.card.skel h2 .skel-bar { width: 62%; height: 21px; }
+.card.skel p .skel-bar { width: 88%; height: 38px; }   /* 兩行說明；行數由 skeletonCards 的 opts.lines 覆寫 */
+.card.skel .card-date .skel-bar { width: 34%; height: 18px; }
+.row.skel { color: transparent; }
+.row.skel .skel-bar { height: 14px; width: 60%; }
+
 /* ── Demogame 橫向軌道：一次看 3 張，其餘左右滑動 ── */
 .rail {
   display: flex; gap: 14px; overflow-x: auto; overflow-y: hidden;
