@@ -8,7 +8,7 @@
 
    另兩區沒有自動掃描，項目全部寫在下面：
 
-     其他報告   cat: "report"    機制說明、專題報告、各專案數值報告（專案根目錄 output.html）
+     其他報告   cat: "report"    機制說明、專題報告、各專案數值報告（專案根目錄 report.html）
      常用連結   cat: "links"     常用的內外部網頁
 
    欄位：
@@ -29,38 +29,38 @@
    網址若與自動掃描到的相同會自動去重（以手動的為準）。
    ============================================================ */
 window.CATALOG = [
-  /* ---- 其他報告：數值報告（各專案根目錄 output.html；規則見 專案需知/開發流程.md §5.9）---- */
+  /* ---- 其他報告：數值報告（各專案根目錄 report.html；規則見 專案需知/開發流程.md §5.9）---- */
   {
     title: "雷神爆金", kind: "數值報告",
-    url: "https://rhino-boss.github.io/Jumbo/Slots/H028_雷神爆金/output.html",
+    url: "https://rhino-boss.github.io/Jumbo/Slots/H028_雷神爆金/report.html",
     cat: "report", game: "H028",
     desc: "Thunder Boost vs PG Lucky Neko：核心指標、倍率線型、連消、M1 倍數、BF 回收、得分區間",
     date: "2026-10-22"
   },
   {
     title: "超級寶石", kind: "數值報告",
-    url: "https://rhino-boss.github.io/Jumbo/Slots/H020_超級寶石/output.html",
+    url: "https://rhino-boss.github.io/Jumbo/Slots/H020_超級寶石/report.html",
     cat: "report", game: "H020",
     desc: "Super Gems vs 前作 1.0.1.3（競品 JILI Fortune Gems）：倍率線型、符號消除、BF 回收、R4 倍數與重轉",
     date: "2026-10-22"
   },
   {
     title: "宙斯 2500", kind: "數值報告",
-    url: "https://rhino-boss.github.io/Jumbo/Slots/H027_宙斯%202500/output.html",
+    url: "https://rhino-boss.github.io/Jumbo/Slots/H027_宙斯%202500/report.html",
     cat: "report", game: "H027",
     desc: "Zeus 2500 A／B vs Gates of Olympus 1000：核心指標、倍數球、倍率線型、連消、Cluster 占比",
     date: "2026-10-07"
   },
   {
     title: "超級鑽石", kind: "數值報告",
-    url: "https://rhino-boss.github.io/Jumbo/Slots/H045_超級鑽石/output.html",
+    url: "https://rhino-boss.github.io/Jumbo/Slots/H045_超級鑽石/report.html",
     cat: "report", game: "H045",
     desc: "Super Diamond vs Super Ace vs Lucky Ace：金框、倍率線型、連消、大鬼、WILD 倍數",
     date: "2026-10-07"
   },
   {
     title: "錢來襲", kind: "數值報告",
-    url: "https://rhino-boss.github.io/Jumbo/Slots/H014_錢來襲/output.html",
+    url: "https://rhino-boss.github.io/Jumbo/Slots/H014_錢來襲/report.html",
     cat: "report", game: "H014",
     desc: "錢來襲 vs JILI Money Coming：R4 特色轉輪、RESPIN、幸運轉盤、獎項結構",
     date: "2026-10-06"
