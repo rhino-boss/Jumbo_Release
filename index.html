@@ -8,8 +8,8 @@
 <link rel="alternate icon" href="assets/favicon.ico" sizes="any">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <meta name="theme-color" content="#2a3d5c">
-<!-- 改到 assets/ 裡的檔案時，這個 ?v=20261102a 要一起改（見 README「改 assets 記得改版號」） -->
-<link rel="stylesheet" href="assets/style.css?v=20261102a">
+<!-- 改到 assets/ 裡的檔案時，這個 ?v=20261104a 要一起改（見 README「改 assets 記得改版號」） -->
+<link rel="stylesheet" href="assets/style.css?v=20261104a">
 <title>Omniplay</title>
 </head>
 <body>
@@ -107,13 +107,13 @@
 
 <footer>made with ☕ by c</footer>
 
-<script src="catalog.js?v=20261102a"></script>
-<script src="assets/app.js?v=20261102a"></script>
+<script src="catalog.js?v=20261104a"></script>
+<script src="assets/app.js?v=20261104a"></script>
 <script>
 (function () {
   /* 每區最多顯示幾筆，要看全部走「完整頁 →」。
      常用連結是一列一個的連結列、比卡片矮，所以多放兩個仍不占版面。 */
-  var LIMIT = { demo: 4, idea: 4, analysis: 4, spec: 4, report: 4, links: 6 };
+  var LIMIT = { demo: 4, idea: 4, analysis: 4, spec: 6, report: 4, links: 6 };
 
   var qEl = document.getElementById("q");
   var manual = (window.CATALOG || []).slice();
