@@ -482,7 +482,7 @@ window.Omni = (function () {
   /* ---------- 專案須知：只列 專案需知/ 裡編譯好的 *.html 完整規範
      （各 .md 是它的來源章節，由 其他/_build_html.py 合併成網頁版，不另外列） ---------- */
   // 顯示名稱；沒列到的檔案就用檔名（底線換空白）
-  var SPEC_TITLE = { igaming_specification: "開發需知", omniplay_specification: "Omniplay 開發規範", landbase_specification: "Landbase 開發規範", reskin_specification: "Reskin 開發規範", development_process: "開發流程", oldhand_rescue_spec: "老手救援 實作規格" };
+  var SPEC_TITLE = { igaming_specification: "開發需知", omniplay_specification: "Omniplay 開發規範", landbase_specification: "Landbase 開發規範", reskin_specification: "Reskin 開發規範", development_process: "開發流程", oldhand_rescue_spec: "老手救援 C2版" };
   // 給其他人看的網頁：標籤改「對外文件」（另一種顏色）
   var SPEC_EXTERNAL = ["omniplay_specification", "landbase_specification", "reskin_specification", "development_process", "oldhand_rescue_spec"];
   var SPEC_DESC = { oldhand_rescue_spec: "給 SPS 實作的老手救援規格（網頁版）" };
