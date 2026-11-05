@@ -493,7 +493,8 @@ window.Omni = (function () {
     var order = SPEC_ORDER.indexOf(base);
     return {
       title: SPEC_TITLE[base] || base.replace(/_/g, " "),
-      url: PAGES_BASE + "/" + encPath(rel),
+      // 帶檔案 sha 當版號：內容一改網址就變，不會開到瀏覽器快取的舊頁（GitHub Pages 快取 10 分鐘）
+      url: PAGES_BASE + "/" + encPath(rel) + (f.sha ? "?v=" + f.sha.slice(0, 8) : ""),
       cat: "spec", kind: SPEC_EXTERNAL.indexOf(base) >= 0 ? "對外文件" : "", game: (group || "").split("/").pop(),
       desc: SPEC_DESC[base] || "完整規範（網頁版）",
       date: "", tags: [(group || "Slot").split("/").pop()],
