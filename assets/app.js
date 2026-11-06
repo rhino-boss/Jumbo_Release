@@ -21,7 +21,7 @@ window.Omni = (function () {
      Project/Slots → Slots、Project/競品分析 → 競品分析。 */
   var OWNER = "rhino-boss";
   var REPO = "Jumbo";
-  var SLOTS_PATH = "Slots";
+  var SLOTS_PATH = "專案開發/Slots";       // 2026-11-06：Slots／System／專案需知 移到 專案開發/
   var ANALYSIS_PATH = "競品分析";
 
   var PAGES_BASE = "https://" + OWNER + ".github.io/" + REPO;
@@ -35,7 +35,7 @@ window.Omni = (function () {
   var COVER_BASE = PAGES_BASE + "/" + encPath(SLOTS_PATH + "/其他/遊戲資源");
   var ANALYSIS_API = API_BASE + "/contents/" + encPath(ANALYSIS_PATH);
   var ANALYSIS_BASE = PAGES_BASE + "/" + encPath(ANALYSIS_PATH);
-  var SPEC_PATH = "專案需知";                        // 規範文件（repo 資料夾名是「需知」；2026-10-02 自 Slots/ 搬到 repo 根目錄）
+  var SPEC_PATH = "專案開發/專案需知";               // 規範文件（2026-11-06 移到 專案開發/）
   var SPEC_API = API_BASE + "/contents/" + encPath(SPEC_PATH);
   var SPEC_URL = PAGES_BASE + "/" + encPath(SPEC_PATH) + "/igaming_specification.html";   // Slot 遊戲共用的開發規範
 
