@@ -4,7 +4,7 @@
    所有內容都從 rhino-boss/Jumbo 掃出來：
      Demogame  ← Slots/<代號_名稱>/
      遊戲發想   ← Slots/其他/其他遊戲/遊戲發想/<遊戲名>/（沒有 Game ID 的發想中遊戲）
-     競品分析   ← 競品分析/遊戲數據_*.html
+     競品分析   ← 競品分析/report_*.html
      其他報告／常用連結 ← catalog.js（手動）
 
    GitHub API 只用 2 次（未登入限每小時 60 次，且依對外 IP 計算，
@@ -452,15 +452,15 @@ window.Omni = (function () {
       .then(function (res) {
         var meta = parseAnalysisReadme(res[1] || "");
         return res[0].filter(function (i) {
-          return i.type === "file" && /^遊戲數據_.+\.html$/.test(i.name);
+          return i.type === "file" && /^(?:report|遊戲數據)_.+\.html$/.test(i.name);
         }).map(function (f) {
           var info = meta.byFile[f.name] || {};
           if (!info.name) {
-            info.name = f.name.replace(/^遊戲數據_/, "").replace(/\.html$/, "").replace(/_/g, " ");
+            info.name = f.name.replace(/^(?:report|遊戲數據)_/, "").replace(/\.html$/, "").replace(/_/g, " ");
             notes.push("README 未列出 " + info.name + "，卡片資訊從檔名推得");
           }
           return {
-            title: info.name + " 遊戲數據",
+            title: info.name + " 競品分析",
             url: ANALYSIS_BASE + "/" + encodeURIComponent(f.name),
             cat: "analysis", game: info.vendor || "",
             desc: analysisDesc(info, meta), date: info.date || "",
