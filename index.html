@@ -9,7 +9,7 @@
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <meta name="theme-color" content="#2a3d5c">
 <!-- 改到 assets/ 裡的檔案時，這個 ?v=20261105c 要一起改（見 README「改 assets 記得改版號」） -->
-<link rel="stylesheet" href="assets/style.css?v=20261105c">
+<link rel="stylesheet" href="assets/style.css?v=20261110a">
 <title>Omniplay</title>
 </head>
 <body>
@@ -205,8 +205,25 @@
     setCount(id, busy ? null : list.length + " " + unit);
     // 專案須知的卡只有一行說明、沒日期；其他報告約三行說明＋日期 —— 骨架照各自的高度放
     if (busy) { body.innerHTML = Omni.skeletonCards(LIMIT[id], false, id === "spec" ? { lines: 1, date: false } : { lines: 3, date: true }); return; }
-    if (!list.length) { body.innerHTML = emptyBox(q ? "沒有符合的項目。" : emptyMsg); return; }
+    if (!list.length) { body.className = "grid"; body.innerHTML = emptyBox(q ? "沒有符合的項目。" : emptyMsg); return; }
+    if (id === "spec") { renderSpecGroups(body, list, q); return; }
+    body.className = "grid";
     body.innerHTML = limit(list, id, q).map(Omni.listCard).join("");
+  }
+
+  /* 專案須知：依標籤分區（專案需知／對外文件），各區自己的小標題與網格；每區最多 LIMIT.spec 筆 */
+  var SPEC_GROUPS = ["專案需知", "對外文件"];
+  function renderSpecGroups(body, list, q) {
+    var groups = {};
+    list.forEach(function (i) { var k = i.kind || "專案需知"; (groups[k] = groups[k] || []).push(i); });
+    var keys = SPEC_GROUPS.filter(function (k) { return groups[k]; })
+      .concat(Object.keys(groups).filter(function (k) { return SPEC_GROUPS.indexOf(k) < 0; }));
+    body.className = "spec-groups";
+    body.innerHTML = keys.map(function (k) {
+      return '<div class="sub-group"><div class="sub-head" data-kind="' + Omni.esc(k) + '">' + Omni.esc(k) +
+        '<span class="n">' + groups[k].length + ' 份</span></div>' +
+        '<div class="grid">' + limit(groups[k], "spec", q).map(Omni.listCard).join("") + '</div></div>';
+    }).join("");
   }
 
   /* ---------- 常用連結（Cworld 爬山頁的連結列樣式） ---------- */
