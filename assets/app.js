@@ -65,6 +65,10 @@ window.Omni = (function () {
         return res.json();
       });
   }
+  /* Pages 的 CDN 會把 README 快取約 10 分鐘，但 contents API 是即時的 ——
+     剛推完的那幾分鐘，HTML 已經列出來、README 還是舊的，就會冒出「README 未列出」。
+     掛一個每分鐘換一次的參數，讓 README 跟著檔案清單一起新。 */
+  function bust() { return "?t=" + Math.floor(Date.now() / 60000); }
   function fetchText(url) {
     return fetch(url).then(function (r) { return r.ok ? r.text() : ""; })
       .catch(function () { return ""; });
@@ -448,7 +452,7 @@ window.Omni = (function () {
   }
 
   function loadAnalysis() {
-    return Promise.all([fetchJson(ANALYSIS_API), fetchText(ANALYSIS_BASE + "/README.md")])
+    return Promise.all([fetchJson(ANALYSIS_API), fetchText(ANALYSIS_BASE + "/README.md" + bust())])
       .then(function (res) {
         var meta = parseAnalysisReadme(res[1] || "");
         return res[0].filter(function (i) {
