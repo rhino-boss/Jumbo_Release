@@ -505,6 +505,27 @@ window.Omni = (function () {
       _order: order < 0 ? 99 : order
     };
   }
+  /* 對外文件：EXTERNAL_PATH/<YYMMDD_主題>/*.html（由 _build_html.py 從同名 md 產生），一次 tree API 取回；
+     列在「專案須知」、標「對外文件」，日期取資料夾開頭的 YYMMDD，新的排前面 */
+  var EXTERNAL_PATH = "專案開發/對外文件";
+  function loadExternalDocs() {
+    var ref = encodeURIComponent("main:" + EXTERNAL_PATH);
+    return fetchJson(API_BASE + "/git/trees/" + ref + "?recursive=1").then(function (tree) {
+      return (tree.tree || []).filter(function (n) {
+        return n.type === "blob" && /^[^\/]+\/[^\/_][^\/]*\.html?$/i.test(n.path);
+      }).map(function (n) {
+        var folder = n.path.split("/")[0], name = n.path.split("/")[1];
+        var m = /^(\d{2})(\d{2})(\d{2})_/.exec(folder);
+        var d = m ? "20" + m[1] + "-" + m[2] + "-" + m[3] : "";
+        return {
+          title: name.replace(/\.html?$/i, "").replace(/_/g, " "),
+          url: PAGES_BASE + "/" + encPath(EXTERNAL_PATH + "/" + n.path) + "?v=" + n.sha.slice(0, 8),
+          cat: "spec", kind: "對外文件", game: "", desc: "更新 " + (d || "—"),
+          date: d, tags: ["對外文件"], _order: 100 - (m ? +("" + m[1] + m[2] + m[3]) / 1e6 : 0)
+        };
+      });
+    }).catch(function (e) { if (e && e.rateLimited) throw e; return []; });
+  }
   function loadSpecs() {
     return fetchJson(SPEC_API).then(function (top) {
       var files = top.filter(function (i) {
@@ -523,7 +544,7 @@ window.Omni = (function () {
         }).catch(function () { return []; });
       }
       var subs = top.filter(function (i) { return i.type === "dir" && i.name !== "其他"; });
-      return Promise.all(subs.map(function (d) { return scanDir(d.name, 2); })).then(function (groups) {
+      return Promise.all(subs.map(function (d) { return scanDir(d.name, 2); }).concat([loadExternalDocs()])).then(function (groups) {
         var out = files.concat.apply(files, groups);
         out.sort(function (a, b) { return a._order - b._order || a.title.localeCompare(b.title); });
         saveList("omniplay-specs", out);
