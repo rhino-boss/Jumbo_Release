@@ -520,7 +520,7 @@ window.Omni = (function () {
         return {
           title: name.replace(/\.html?$/i, "").replace(/_/g, " "),
           url: PAGES_BASE + "/" + encPath(EXTERNAL_PATH + "/" + n.path) + "?v=" + n.sha.slice(0, 8),
-          cat: "spec", kind: "對外文件", game: "", desc: "更新 " + (d || "—"),
+          cat: "spec", kind: "對外文件", game: "", desc: "對外文件（網頁版）",
           date: d, tags: ["對外文件"], _order: 100 - (m ? +("" + m[1] + m[2] + m[3]) / 1e6 : 0)
         };
       });
