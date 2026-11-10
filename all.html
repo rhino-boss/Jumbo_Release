@@ -9,7 +9,7 @@
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <meta name="theme-color" content="#2a3d5c">
 <!-- 改到 assets/ 裡的檔案時，這個 ?v=20261105c 要一起改（見 README「改 assets 記得改版號」） -->
-<link rel="stylesheet" href="assets/style.css?v=20261110a">
+<link rel="stylesheet" href="assets/style.css?v=20261110b">
 <title>Omniplay</title>
 </head>
 <body>
@@ -177,11 +177,11 @@
     return out;
   }
 
-  /* 合併頁（cat=docs／cat=games）的標籤篩選：null＝全部 */
-  var MERGED = { docs: true, games: true };
+  /* 合併頁（cat=docs／cat=games）與專案須知（專案須知／對外文件）的標籤篩選：null＝全部 */
+  var MERGED = { docs: true, games: true, spec: true };
   var kindSel = null;
   var KIND_COLOR = { "正式專案": "--cat-demo", "遊戲發想": "--cat-idea", "克隆遊戲": "--cat-clone",
-                     "競品分析": "--cat-analysis", "專案須知": "--cat-spec",
+                     "競品分析": "--cat-analysis", "專案須知": "--cat-spec", "對外文件": "--cat-external",
                      "數值報告": "--cat-numeric", "其他": "--cat-report" };
   function kindOf(it) { return it.kind || Omni.CAT_LABEL[it.cat] || it.cat; }
   function renderChips() {

@@ -136,15 +136,6 @@ nav .current { color: #fff; font-weight: 600; font-size: .85rem; }
   font-size: .82rem; font-weight: 600; color: var(--accent-mid); text-decoration: none;
 }
 .sec-link:hover { text-decoration: underline; }
-/* 專案須知：依標籤分區的小標題 */
-.sub-group + .sub-group { margin-top: 22px; }
-.sub-head {
-  display: flex; align-items: center; gap: 8px; margin: 0 0 10px;
-  font-size: .86rem; font-weight: 700; color: var(--text-secondary);
-}
-.sub-head::before { content: ""; width: 3px; height: 14px; border-radius: 2px; background: var(--sec-color); }
-.sub-head[data-kind="對外文件"]::before { background: var(--cat-external); }
-.sub-head .n { font-size: .74rem; font-weight: 700; font-variant-numeric: tabular-nums; }
 
 /* ── 連結列（Cworld 爬山頁的「其他頁面」） ── */
 /* 注意：class 名別用 .links — 區塊本身是 class="section links"，會一起吃到 display:grid */
