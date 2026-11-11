@@ -504,7 +504,7 @@ window.Omni = (function () {
       url: PAGES_BASE + "/" + encPath(rel) + (f.sha ? "?v=" + f.sha.slice(0, 8) : ""),
       cat: "spec", kind: SPEC_EXTERNAL.indexOf(base) >= 0 ? "對外文件" : "", game: (group || "").split("/").pop(),
       desc: SPEC_DESC[base] || "完整規範（網頁版）",
-      date: "", tags: [(group || "Slot").split("/").pop()],
+      date: "", tags: [(group || "Slot").split("/").pop()], _path: SPEC_PATH.split("/").pop() + "/" + (group ? group + "/" : "") + f.name,
       _order: order < 0 ? 99 : order
     };
   }
@@ -523,8 +523,9 @@ window.Omni = (function () {
         return {
           title: name.replace(/\.html?$/i, "").replace(/_/g, " "),
           url: PAGES_BASE + "/" + encPath(EXTERNAL_PATH + "/" + n.path) + "?v=" + n.sha.slice(0, 8),
-          cat: "spec", kind: "對外文件", game: "", desc: "對外文件（網頁版）",
-          date: d, tags: ["對外文件"], _order: 100 - (m ? +("" + m[1] + m[2] + m[3]) / 1e6 : 0)
+          // 2026-11-11 使用者：對外文件資料夾裡的單頁標「其他」（與規範類的「對外文件」分開）
+          cat: "spec", kind: "其他", game: "", desc: "對外文件（網頁版）", _path: EXTERNAL_PATH.split("/").pop() + "/" + n.path,
+          date: d, tags: ["其他"], _order: 100 - (m ? +("" + m[1] + m[2] + m[3]) / 1e6 : 0)
         };
       });
     }).catch(function (e) { if (e && e.rateLimited) throw e; return []; });
@@ -547,8 +548,13 @@ window.Omni = (function () {
         }).catch(function () { return []; });
       }
       var subs = top.filter(function (i) { return i.type === "dir" && i.name !== "其他"; });
-      return Promise.all(subs.map(function (d) { return scanDir(d.name, 2); }).concat([loadExternalDocs()])).then(function (groups) {
+      // 最後更新日：_build_html.py 寫的 專案需知/_updated.json（{"專案需知/x.html": {date}}），走 Pages 不耗 API 額度
+      var updated = fetchText(PAGES_BASE + "/" + encPath(SPEC_PATH + "/_updated.json") + bust())
+        .then(function (t) { try { return JSON.parse(t || "{}"); } catch (e) { return {}; } });
+      return Promise.all(subs.map(function (d) { return scanDir(d.name, 2); }).concat([loadExternalDocs(), updated])).then(function (groups) {
+        var upd = groups.pop();
         var out = files.concat.apply(files, groups);
+        out.forEach(function (it) { if (upd[it._path]) it.date = upd[it._path].date; });
         out.sort(function (a, b) { return a._order - b._order || a.title.localeCompare(b.title); });
         saveList("omniplay-specs", out);
         return out;
