@@ -277,9 +277,12 @@ window.Omni = (function () {
           if (m) { hasLog[m[1]] = true; return; }
           m = n.path.match(/^(.+)\/(game_rule[^/]*\.md)$/);
           if (m && !/\/Versions\//.test(m[1])) { if (!ruleFile[m[1]] || m[2] === "game_rule.md") ruleFile[m[1]] = m[2]; return; }
-          // 數值報告：各遊戲 其他/數值報告*.html（同一款有多份時取檔名排序最後的）
+          // 數值報告：專案根目錄 report.html（2026-11-03 起的規範位置）優先；
+          // 沒有才退回舊位置 其他/數值報告*.html（多份時取檔名排序最後的）。值存相對遊戲資料夾的路徑
+          m = n.path.match(/^(.+)\/report\.html$/);
+          if (m && !/\/Versions\//.test(m[1])) { numReport[m[1]] = "report.html"; return; }
           m = n.path.match(/^(.+)\/其他\/(數值報告[^/]*\.html)$/);
-          if (m) { if (!numReport[m[1]] || m[2] > numReport[m[1]]) numReport[m[1]] = m[2]; return; }
+          if (m) { var old = "其他/" + m[2]; if (numReport[m[1]] !== "report.html" && (!numReport[m[1]] || old > numReport[m[1]])) numReport[m[1]] = old; return; }
           m = n.path.match(/遊戲資源\/([A-Za-z0-9]+)\.png$/);
           if (m) hasCover[m[1]] = true;
         });
@@ -332,7 +335,7 @@ window.Omni = (function () {
               docs: [
                 { label: "開發規範 (Spec)", url: SPEC_URL },
                 rule.hasRule ? { label: "Game Rule", url: BLOB_BASE + "/" + encPath(SLOTS_PATH + "/" + folder) + "/" + encodeURIComponent(ruleFile[folder] || "game_rule.md") } : null,
-                numReport[folder] ? { label: "數值報告", url: gameBase + "/" + encodeURIComponent("其他") + "/" + encodeURIComponent(numReport[folder]) } : null
+                numReport[folder] ? { label: "數值報告", url: gameBase + "/" + encPath(numReport[folder]) } : null
               ].filter(Boolean)
             };
           });

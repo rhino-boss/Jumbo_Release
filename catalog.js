@@ -31,6 +31,13 @@
 window.CATALOG = [
   /* ---- 其他報告：數值報告（各專案根目錄 report.html；規則見 專案需知/開發流程.md §5.9）---- */
   {
+    title: "亡靈派對", kind: "數值報告",
+    url: "https://rhino-boss.github.io/Jumbo/專案開發/Slots/H032_亡靈派對/report.html",
+    cat: "report", game: "H032",
+    desc: "Calavera Party vs FC DJ Boom Boom：基本指標、存活模擬、金框與累積倍數、連消、框數分布、倍率線型",
+    date: "2026-11-11"
+  },
+  {
     title: "雷神爆金", kind: "數值報告",
     url: "https://rhino-boss.github.io/Jumbo/專案開發/Slots/H028_雷神爆金/report.html",
     cat: "report", game: "H028",
