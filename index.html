@@ -175,13 +175,13 @@
   function limit(list, key, q) {
     return q ? list : list.slice(0, rowLimit(key));
   }
-  /* 專案須知、其他報告只放一整列：一般寬度 3 張、視窗夠寬變 4 張（最多 4），張數＝格線當下的欄數 */
+  /* 專案須知、其他報告：一般寬度 3 張、視窗夠寬變 4 張（最多 4，依格線欄數）；窄螢幕至少 3 張，一列塞不下就換行 */
   var ROW_FIT = { spec: true, report: true };
   function rowLimit(key) {
     if (!ROW_FIT[key]) return LIMIT[key];
     var el = document.getElementById(key + "-body");
     var cols = el ? getComputedStyle(el).gridTemplateColumns.split(" ").filter(Boolean).length : LIMIT[key];
-    return Math.max(1, Math.min(4, cols || LIMIT[key]));
+    return Math.max(3, Math.min(4, cols || LIMIT[key]));
   }
 
   /* ---------- Demogame／遊戲發想區（同一種遊戲卡） ---------- */
