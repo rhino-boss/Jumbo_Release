@@ -82,6 +82,13 @@ window.CATALOG = [
     date: "2026-10-29"
   },
   {
+    title: "動態調性（提案方向）",
+    url: "https://rhino-boss.github.io/Jumbo/專案開發/System/機制_動態調性/機制說明_動態調性.html",
+    cat: "report",
+    desc: "依玩家狀態換同 RTP、不同調性的倍率權重：提案方向、設計理由、現有數據、需要數據觀察的項目",
+    date: "2026-11-17"
+  },
+  {
     title: "老手救援 C3 (正式報告)",
     url: "https://rhino-boss.github.io/Jumbo/專案開發/System/機制_老手救援/老手救援%20C-2/機制報告_老手救援.html",
     cat: "report",
