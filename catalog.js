@@ -90,7 +90,7 @@ window.CATALOG = [
   },
   {
     title: "老手救援 C3",
-    url: "https://rhino-boss.github.io/Jumbo/專案開發/System/機制_老手救援/老手救援%20C-2/機制說明_老手救援.html",
+    url: "https://rhino-boss.github.io/Jumbo/專案開發/System/機制_老手救援/機制說明_老手救援.html",
     cat: "report",
     desc: "頁內切換三個版本：C 版雙池、C-2 初版、C-2 分階段（現行 c2-1.5）",
     date: "2026-09-29"
