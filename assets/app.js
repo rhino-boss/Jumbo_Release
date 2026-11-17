@@ -436,7 +436,7 @@ window.Omni = (function () {
   function analysisDesc(info, meta) {
     var p = [], rtp = meta.rtp[info.name], off = meta.official[info.name];
     if (rtp && rtp !== "⏳") p.push("總 RTP " + rtp + (off && off !== "⏳" ? "／官方 " + off : ""));
-    if (info.spins) p.push("付費轉 " + info.spins);
+    if (info.spins) p.push(info.spins);   // README 已含來源別（付費平台／試玩平台／平台資料）
     return p.join("，");
   }
 
