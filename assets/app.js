@@ -436,8 +436,14 @@ window.Omni = (function () {
   function analysisDesc(info, meta) {
     var p = [], rtp = meta.rtp[info.name], off = meta.official[info.name];
     if (rtp && rtp !== "⏳") p.push("總 RTP " + rtp + (off && off !== "⏳" ? "／官方 " + off : ""));
-    if (info.spins) p.push(info.spins);   // README 已含來源別（付費平台／試玩平台／平台資料）
-    return p.join("，");
+    // README 的「資料來源與樣本」已含來源別（付費平台／試玩平台／平台資料）；
+    // 一份報告混用多種來源時以「；」分隔，這裡拆成各自一行
+    if (info.spins) {
+      info.spins.split(/[;；]/).forEach(function (s) {
+        s = s.trim(); if (s) p.push(s);
+      });
+    }
+    return p.join("\n");   // .card p 以 white-space:pre-line 呈現
   }
 
   /* analysis／specs 也留一份上次成功的清單（24h），API 額度用完時頂著，
