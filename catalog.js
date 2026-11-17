@@ -83,14 +83,14 @@ window.CATALOG = [
   },
   {
     title: "老手救援 C3 (正式報告)",
-    url: "https://rhino-boss.github.io/Jumbo/專案開發/System/報告/機制報告_老手救援.html",
+    url: "https://rhino-boss.github.io/Jumbo/專案開發/System/機制_老手救援/老手救援%20C-2/機制報告_老手救援.html",
     cat: "report",
     desc: "階段一（當日 40–400 轉）：這次目標、倍數留存數據、機制與模擬結果、套利檢查",
     date: "2026-10-05"
   },
   {
     title: "老手救援 C3",
-    url: "https://rhino-boss.github.io/Jumbo/專案開發/System/機制說明_老手救援.html",
+    url: "https://rhino-boss.github.io/Jumbo/專案開發/System/機制_老手救援/老手救援%20C-2/機制說明_老手救援.html",
     cat: "report",
     desc: "頁內切換三個版本：C 版雙池、C-2 初版、C-2 分階段（現行 c2-1.5）",
     date: "2026-09-29"
