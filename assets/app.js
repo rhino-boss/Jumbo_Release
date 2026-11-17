@@ -700,7 +700,8 @@ window.Omni = (function () {
            (ext ? '' : '') + '>' +
       kindBadge + tag +
       '<span class="r-title">' + esc(it.title) + '</span>' +
-      (it.desc ? '<span class="r-desc">' + esc(it.desc) + '</span>' : '') +
+      // 清單列是單行加省略號，卡片的換行在這裡改成可見的分隔符
+      (it.desc ? '<span class="r-desc">' + esc(String(it.desc).replace(/\n+/g, '　／　')) + '</span>' : '') +
       (it.date ? '<span class="r-meta">' + esc(it.date) + '</span>' : '') +
     '</a>';
   }
