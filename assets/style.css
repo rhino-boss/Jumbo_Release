@@ -425,6 +425,21 @@ footer {
   margin: 22px 0 16px; font-size: .82rem; color: var(--text-secondary);
 }
 .toolbar .spacer { margin-left: auto; }
+/* 篩選下拉（原本那排 chips 收成一顆鈕，跟排序同一排） */
+.toolbar { flex-wrap: nowrap; }
+.toolbar .sec-btn { flex: none; white-space: nowrap; }
+.fdd { position: relative; flex: none; }
+.fdd[hidden] { display: none; }
+.fdd > .chip { white-space: nowrap; }
+.fdd > .chip::after { content: " ▾"; font-size: .7rem; opacity: .8; }
+.fmenu {
+  display: none; position: absolute; top: calc(100% + 6px); left: 0; z-index: 20;
+  flex-direction: column; align-items: stretch; gap: 6px; min-width: 140px;
+  padding: 8px; background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,.12);
+}
+.fdd.open .fmenu { display: flex; }
+.fmenu .chip { text-align: left; white-space: nowrap; }
 
 @media (max-width: 900px) {
   .rail > * { flex: 0 0 calc((100% - 14px) / 2); }
@@ -438,7 +453,8 @@ footer {
   .container { padding: 22px 24px 60px; }
   .grid { grid-template-columns: 1fr; }
   .rail > * { flex: 0 0 86%; }
-  .sec-actions { width: 100%; margin-left: 0; }
+  .sec-head { flex-wrap: nowrap; }
+  .sec-actions { flex: none; }
 }
 
 /* ══ 常用連結的分群標籤配色 ══

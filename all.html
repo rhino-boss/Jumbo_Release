@@ -9,7 +9,7 @@
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <meta name="theme-color" content="#2a3d5c">
 <!-- 改到 assets/ 裡的檔案時，這個 ?v=20261105c 要一起改（見 README「改 assets 記得改版號」） -->
-<link rel="stylesheet" href="assets/style.css?v=20261117a">
+<link rel="stylesheet" href="assets/style.css?v=20261120a">
 <title>Omniplay</title>
 </head>
 <body>
@@ -35,15 +35,13 @@
   <div class="notes" id="notes" hidden></div>
 
   <div class="toolbar">
-    <span id="count">正在載入…</span>
+    <span class="fdd" id="fdd" hidden><button class="chip on" id="fbtn" type="button"></button><span class="fmenu" id="chips"></span></span>
     <div class="spacer"></div>
-    <span>排序</span>
     <button class="sec-btn" type="button" id="sort-key" title="點一下切換排序依據"></button>
     <button class="sec-btn" type="button" id="sort-dir" title="切換升冪／降冪">↓</button>
     <button class="sec-btn" type="button" id="view-toggle"></button>
   </div>
 
-  <div class="chips" id="chips" hidden></div>
   <div id="body"></div>
 </div>
 
@@ -128,7 +126,6 @@
 
   var qEl = document.getElementById("q");
   var body = document.getElementById("body");
-  var countEl = document.getElementById("count");
   var keyBtn = document.getElementById("sort-key");
   var dirBtn = document.getElementById("sort-dir");
   var viewBtn = document.getElementById("view-toggle");
@@ -186,12 +183,17 @@
   function kindOf(it) { return it.kind || Omni.CAT_LABEL[it.cat] || it.cat; }
   function renderChips() {
     var box = document.getElementById("chips");
-    if (!MERGED[cat] || (loading && !items.length)) { box.hidden = true; return; }
+    var dd = document.getElementById("fdd");
+    var fbtn = document.getElementById("fbtn");
+    if (!MERGED[cat] || (loading && !items.length)) { dd.hidden = true; return; }
     var counts = {};
     items.forEach(function (it) { var k = kindOf(it); counts[k] = (counts[k] || 0) + 1; });
     var order = Object.keys(KIND_COLOR).filter(function (k) { return counts[k]; })
       .concat(Object.keys(counts).filter(function (k) { return !(k in KIND_COLOR); }));
-    box.hidden = false;
+    dd.hidden = false;
+    // 篩選合併成一顆下拉鈕：按鈕顯示目前選的分類＋數量，點開列出全部選項
+    fbtn.style.cssText = kindSel && KIND_COLOR[kindSel] ? "--chip-c: var(" + KIND_COLOR[kindSel] + ")" : "";
+    fbtn.innerHTML = Omni.esc(kindSel || "全部") + '<span class="cnt">' + (kindSel ? (counts[kindSel] || 0) : items.length) + '</span>';
     box.innerHTML = '<button type="button" class="chip' + (kindSel === null ? ' on' : '') + '" data-k="">全部<span class="cnt">' + items.length + '</span></button>' +
       order.map(function (k) {
         var style = KIND_COLOR[k] ? ' style="--chip-c: var(' + KIND_COLOR[k] + ')"' : '';
@@ -199,10 +201,19 @@
                Omni.esc(k) + '<span class="cnt">' + counts[k] + '</span></button>';
       }).join("");
   }
+  document.getElementById("fbtn").addEventListener("click", function (e) {
+    e.stopPropagation();
+    document.getElementById("fdd").classList.toggle("open");
+  });
+  document.addEventListener("click", function (e) {
+    var dd = document.getElementById("fdd");
+    if (!dd.contains(e.target)) dd.classList.remove("open");
+  });
   document.getElementById("chips").addEventListener("click", function (e) {
     var chip = e.target.closest && e.target.closest(".chip");
     if (!chip) return;
     kindSel = chip.getAttribute("data-k") || null;
+    document.getElementById("fdd").classList.remove("open");
     render();
   });
 
@@ -213,10 +224,6 @@
       if (MERGED[cat] && kindSel && kindOf(it) !== kindSel) return false;
       return !q || Omni.haystackOf(it).indexOf(q) !== -1;
     }));
-
-    countEl.textContent = loading
-      ? "正在載入…"
-      : list.length + " " + C.unit;
 
     var box = document.getElementById("notes");
     if (Omni.notes.length) {
