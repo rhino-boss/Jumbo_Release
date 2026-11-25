@@ -497,7 +497,9 @@ window.Omni = (function () {
   // 顯示名稱；沒列到的檔案就用檔名（底線換空白）
   var SPEC_TITLE = { igaming_specification: "開發需知", omniplay_specification: "Omniplay 開發規範", landbase_specification: "Landbase 開發規範", reskin_specification: "Reskin 開發規範", mexico_specification: "Mexico 開發規範", development_process: "開發流程", oldhand_rescue_spec: "老手救援 C-2版" };
   // 給其他人看的網頁：標籤改「對外文件」（另一種顏色）
-  var SPEC_EXTERNAL = ["omniplay_specification", "landbase_specification", "reskin_specification", "mexico_specification", "development_process", "oldhand_rescue_spec"];
+  var SPEC_EXTERNAL = ["development_process", "oldhand_rescue_spec"];
+  // 各產線規範（2026-11-25 使用者：四站同層級，標「產線須知」）
+  var SPEC_LINE = ["omniplay_specification", "landbase_specification", "reskin_specification", "mexico_specification"];
   var SPEC_DESC = { oldhand_rescue_spec: "給 SPS 實作的老手救援規格（網頁版）" };
   var SPEC_ORDER = ["igaming_specification", "omniplay_specification", "landbase_specification", "reskin_specification", "mexico_specification", "development_process", "oldhand_rescue_spec"];
   function specItem(f, group) {
@@ -508,7 +510,7 @@ window.Omni = (function () {
       title: SPEC_TITLE[base] || base.replace(/_/g, " "),
       // 帶檔案 sha 當版號：內容一改網址就變，不會開到瀏覽器快取的舊頁（GitHub Pages 快取 10 分鐘）
       url: PAGES_BASE + "/" + encPath(rel) + (f.sha ? "?v=" + f.sha.slice(0, 8) : ""),
-      cat: "spec", kind: SPEC_EXTERNAL.indexOf(base) >= 0 ? "對外文件" : "", game: (group || "").split("/").pop(),
+      cat: "spec", kind: SPEC_LINE.indexOf(base) >= 0 ? "產線須知" : SPEC_EXTERNAL.indexOf(base) >= 0 ? "對外文件" : "", game: (group || "").split("/").pop(),
       desc: SPEC_DESC[base] || "完整規範（網頁版）",
       date: "", tags: [(group || "Slot").split("/").pop()], _path: SPEC_PATH.split("/").pop() + "/" + (group ? group + "/" : "") + f.name,
       _order: order < 0 ? 99 : order
