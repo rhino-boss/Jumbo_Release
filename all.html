@@ -179,8 +179,7 @@
   var kindSel = null;
   var KIND_COLOR = { "正式專案": "--cat-demo", "遊戲發想": "--cat-idea", "克隆遊戲": "--cat-clone",
                      "競品分析": "--cat-analysis", "專案須知": "--cat-spec", "對外文件": "--cat-external",
-                     "數值報告": "--cat-numeric", "其他": "--cat-report", "test": "--cat-test" };
-  document.documentElement.style.setProperty("--cat-test", "#d9480f");   /* test：測試中的頁面（橘） */
+                     "數值報告": "--cat-numeric", "其他": "--cat-report" };
   function kindOf(it) { return it.kind || Omni.CAT_LABEL[it.cat] || it.cat; }
   function renderChips() {
     var box = document.getElementById("chips");
@@ -299,19 +298,6 @@
     Omni.loadGames().then(function (g) {
       games = cat === "games" ? g
         : g.filter(function (x) { return cat === "idea" ? x.idea : !x.idea; });
-      /* test 標籤（2026-11-27 使用者）：測試中的頁面，沿用該遊戲的卡片資料，只換網址與名稱 */
-      if (cat === "games") {
-        var TEST_PAGES = [{ folder: "H027_宙斯 2500", file: "index2.html", name: "宙斯 2500 手機版", play: "手機直式遊玩區測試：彩金列、操作列、懸浮設定" }];
-        TEST_PAGES.forEach(function (t) {
-          var base = g.filter(function (x) { return x.folder === t.folder; })[0];
-          if (!base) return;
-          var copy = {};
-          Object.keys(base).forEach(function (k) { copy[k] = base[k]; });
-          copy.folder = base.folder + "/" + t.file; copy.name = t.name; copy.kind = "test"; copy.play = t.play;
-          copy.playUrl = base.playUrl + encodeURIComponent(t.file); copy.promoted = false;
-          games = games.concat([copy]);
-        });
-      }
       items = games.map(Omni.gameAsItem);
       if (cat === "games") items.forEach(function (it) { it._showKind = true; });
       loading = false; render();
